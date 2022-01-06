@@ -3,13 +3,13 @@ package perceptron;
 import toolKit.HandwrittenDigitClassifierAlgorithm; //To ensure this class contains necessary functions and variables to be a machine learning algorithm
 import toolKit.Row; //For assigning each row from the dataset
 
-import java.util.Random;
+import java.util.Random; //For seed to ensure same accuracy.
 
 public class Perceptron extends HandwrittenDigitClassifierAlgorithm {
     private double learningRate = 1;
     private double[] weights;
     private final Random seedForRandomisingWeights = new Random();
-    private final long seedUsed;
+    private final long seedUsed; //ensures same algorithm inputs are made (if specified)
     private double errorRate = 1; //error is at the highest it can be initially.
 
     //Constructor for a random seed
@@ -35,11 +35,18 @@ public class Perceptron extends HandwrittenDigitClassifierAlgorithm {
             weights[weightNumber] = seedForRandomisingWeights.nextDouble();
     }
 
+    /**
+     * Runs the Perceptron algorithm
+     */
     @Override
     public void run() {
 
     }
 
+    /**
+     * sums the dot product of the weights and the sumOfInputs of each row
+     * @return  a 1 if sum of dot product is more than or equal to 0, otherwise returns a 0.
+     */
     public int getOutput() {
         Row[] trainingRows = getTrainingRows();
         double sum = weights[0]; //dot product of weight0 is with x0 (which is 1).
