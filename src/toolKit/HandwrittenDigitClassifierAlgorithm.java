@@ -1,9 +1,9 @@
-package prep;
+package toolKit;
 
 public abstract class HandwrittenDigitClassifierAlgorithm {
     private final Row[] trainingRows;
     private final Row[] testRows;
-    private String algorithmName;
+    private final String algorithmName;
     private int correctClassificationCounter = 0; //counter for correct classifications
     private int incorrectClassificationCounter = 0;//counter for incorrect classifications
 

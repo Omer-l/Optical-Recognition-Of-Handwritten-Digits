@@ -1,4 +1,4 @@
-package prep;
+package toolKit;
 
 import java.io.File; //Getting the File
 import java.io.FileNotFoundException; //In case file is not found
@@ -18,7 +18,9 @@ public class FileReaderDataset {
 	}
 	
 	/**
-	 * This function gets the Row's inputs and classification that for each line
+	 * Gets each Row's inputs and classification from each line
+	 *
+	 * @return an array of Rows
 	 */
 	public Row[] getData() {
 
