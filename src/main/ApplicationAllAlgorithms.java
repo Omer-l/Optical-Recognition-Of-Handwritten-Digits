@@ -11,7 +11,7 @@ import toolKit.*; //For reading in the data and creating an array of Rows.
 public class ApplicationAllAlgorithms {
     private final static FileReaderDataset TRAINING_FILE_READER = new FileReaderDataset("dataset1.csv"); //for training file reading
     private final static FileReaderDataset TESTING_FILE_READER = new FileReaderDataset("dataset2.csv"); //for testing file reading
-    priva   te final static Row[] TRAINING_DATA_SETS = TRAINING_FILE_READER.getData(); //training data
+    private final static Row[] TRAINING_DATA_SETS = TRAINING_FILE_READER.getData(); //training data
     private final static Row[] TESTING_DATA_SETS = TESTING_FILE_READER.getData(); //test data
 
     public static void main(String[] args) {

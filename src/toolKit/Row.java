@@ -53,4 +53,13 @@ public class Row {
 
         return output;
     }
+
+    //Returns the sum of all the inputs in the inputs array.
+    public double getSumOfInputs() {
+        double sum = 0;
+        for(double input : inputs)
+            sum += input;
+
+        return sum;
+    }
 }

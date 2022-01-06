@@ -18,14 +18,6 @@ public abstract class HandwrittenDigitClassifierAlgorithm {
 
     }
 
-    public Row[] getTrainingRows() {
-        return trainingRows;
-    }
-
-    public Row[] getTestRows() {
-        return testRows;
-    }
-
     //adds 1 to correct classification counter
     public void add1Correct() {
         correctClassificationCounter++;
@@ -34,6 +26,26 @@ public abstract class HandwrittenDigitClassifierAlgorithm {
     //adds 1 to incorrect classification counter
     public void add1Incorrect() {
         incorrectClassificationCounter++;
+    }
+
+    public Row[] getTrainingRows() {
+        return trainingRows;
+    }
+
+    public Row[] getTestRows() {
+        return testRows;
+    }
+
+    public String getAlgorithmName() {
+        return algorithmName;
+    }
+
+    public int getCorrectClassificationCounter() {
+        return correctClassificationCounter;
+    }
+
+    public int getIncorrectClassificationCounter() {
+        return incorrectClassificationCounter;
     }
 
     @Override
