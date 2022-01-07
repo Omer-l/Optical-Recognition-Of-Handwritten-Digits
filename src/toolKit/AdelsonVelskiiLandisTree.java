@@ -5,7 +5,8 @@ public class AdelsonVelskiiLandisTree {
     /**
      * Contains left and a right child which
      * are data points. Each datapoint's key is
-     * the distance, and the value is the Row
+     * the distance, and the value is the Row(which holds the inputs and classification
+     * )
      */
     private static class Node {
         private final double key;
@@ -17,6 +18,35 @@ public class AdelsonVelskiiLandisTree {
         public Node(Row row) {
             this.key = row.getDistance();
             this.value = row;
+        }
+    }
+
+    /**
+     * Primarily used for traversing the tree.
+     */
+    private static class MyStack {
+        private int topOfStack = 0;
+        private int capacity = 1; // there will be at least this many data points in the tree
+        private Node[] dataPoints = new Node[capacity]; //array holding nodes of the tree
+
+        //doubles capacity of stack
+        private void resize() {
+            Node[] newDataPoints = new Node[this.capacity *= 2];
+            System.arraycopy(dataPoints, 0, newDataPoints, 0, topOfStack);
+            this.dataPoints = newDataPoints;
+        }
+
+        //pushes desired element into the stack
+        private void push(Node newDataPoint) {
+            if(topOfStack >= capacity)
+                resize();
+
+            dataPoints[topOfStack++] = newDataPoint;
+        }
+
+        //pops element at the top of the stack
+        private Node pop() {
+            return topOfStack == 0? null : dataPoints[topOfStack--];
         }
     }
 
@@ -130,4 +160,5 @@ public class AdelsonVelskiiLandisTree {
         //Returns an unchanged pointer
         return root;
     }
+
 }
