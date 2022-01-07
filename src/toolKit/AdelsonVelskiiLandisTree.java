@@ -161,4 +161,39 @@ public class AdelsonVelskiiLandisTree {
         return root;
     }
 
+
+    /**
+     * Gets a given number of nearest neighbours
+     * @param k     is the number of neighbours to get
+     * @return      an array of rows in sortest order (lowest to highest)
+     */
+    public Row[] getNearestNeighbours(int k) {
+        if(this.root == null) return null; //no data points/rows in the tree
+
+        Row[] nearestNeighbours = new Row[k];
+        Node currentNode = this.root; //starts from the top of the tree.
+
+        //Traverses the tree
+        int indexOfNeighbour = 0;
+        MyStack nodesLeftToTraverse = new MyStack();
+        //Traverses leftmost and then a right until rightmost node.
+        while(currentNode != null || indexOfNeighbour == k) {
+
+            //get leftmost from the current root node
+            while(currentNode != null || indexOfNeighbour == k) {
+                nodesLeftToTraverse.push(currentNode);
+                nearestNeighbours[indexOfNeighbour++] = currentNode.value;
+                currentNode = currentNode.left;
+            }
+
+            //goes 1 right to continue traversing
+            if(indexOfNeighbour != k) { //to continue traversing
+                //current node needs to be updated one to the right, since it is currently null after going past leftmost node
+                currentNode = nodesLeftToTraverse.pop().right;
+                nearestNeighbours[indexOfNeighbour++] = currentNode.value;
+            }
+        }
+
+        return nearestNeighbours;
+    }
 }
