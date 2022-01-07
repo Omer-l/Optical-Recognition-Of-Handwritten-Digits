@@ -11,9 +11,9 @@ public class MyArrays {
      * @param doubleArray a double array to print
      * @return a string containing a single line of integer type elements
      */
-    public static String toString(double[] intArray) {
+    public static String toString(double[] doubleArray) {
         String arrayToString = "";
-        for (double arrayElement : intArray)
+        for (double arrayElement : doubleArray)
             arrayToString += " " + (arrayElement + 1);
         return arrayToString;
     }

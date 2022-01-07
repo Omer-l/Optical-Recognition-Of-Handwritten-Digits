@@ -1,9 +1,14 @@
 package toolKit;
 
+/**
+ * Each Row consists of 64 inputs and a classification (digit 0-9).
+ * Each Row can be represented as a data point on a 64 dimensional graph.
+ */
 public class Row {
 
-    private double [] inputs;
-    private int classification;
+    private double [] inputs; //inputs
+    private int classification; //classification
+    private double distance; //distance to get to this row
 
     public Row(double[] inputs, int classification) {
         this.inputs = inputs;
@@ -19,6 +24,15 @@ public class Row {
             sum += Math.pow(this.inputs[inputIndex] - otherDataPoint.inputs[inputIndex], 2);
 
         return Math.sqrt(sum);
+    }
+
+    //Returns the sum of all the inputs in the inputs array.
+    public double getSumOfInputs() {
+        double sum = 0;
+        for(double input : inputs)
+            sum += input;
+
+        return sum;
     }
 
     public double[] getInputs() {
@@ -37,12 +51,15 @@ public class Row {
 		this.classification = classification;
 	}
 
-    public static void printPoints(Row[] points) {
-        for (Row row : points)
-            System.out.println(row.toString());
+    public double getDistance() {
+        return distance;
     }
 
-	@Override
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    @Override
     public String toString() {
         String output = "";
 
@@ -52,14 +69,5 @@ public class Row {
         output += classification;
 
         return output;
-    }
-
-    //Returns the sum of all the inputs in the inputs array.
-    public double getSumOfInputs() {
-        double sum = 0;
-        for(double input : inputs)
-            sum += input;
-
-        return sum;
     }
 }

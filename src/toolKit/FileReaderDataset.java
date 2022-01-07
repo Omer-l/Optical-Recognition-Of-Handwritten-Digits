@@ -25,7 +25,7 @@ public class FileReaderDataset {
 	public Row[] getData() {
 
 		Row[] points = new Row[getNumberOfLines()];
-		int pointIterator = 0;
+		int rowIndex = 0;
 
 		try {
 			Scanner input = new Scanner(file);
@@ -40,8 +40,8 @@ public class FileReaderDataset {
 
 				int classification = Integer.parseInt(bits[bits.length - 1]);
 				
-				points[pointIterator] = new Row(inputsForPoint, classification);
-				pointIterator++;
+				points[rowIndex] = new Row(inputsForPoint, classification);
+				rowIndex++;
 			}
 		} catch (FileNotFoundException fileNotFoundException) {
 			System.out.println(FILE_NOT_FOUND_ERR);

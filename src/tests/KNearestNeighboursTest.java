@@ -11,7 +11,6 @@ public class KNearestNeighboursTest {
     private final static Row[] TRAINING_DATA_SETS = TRAINING_FILE_READER.getData(); //training data
     private final static Row[] TESTING_DATA_SETS = TESTING_FILE_READER.getData(); //test data
 
-
     @Test
     public void getDistanceToAllDataPoints() {
         NearestNeighbour nearestNeighbour = new NearestNeighbour("Nearest Neigbour", TRAINING_DATA_SETS, TESTING_DATA_SETS);
