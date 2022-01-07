@@ -46,12 +46,12 @@ public class AdelsonVelskiiLandisTree {
 
         //pops element at the top of the stack
         private Node pop() {
-            return topOfStack == 0? null : dataPoints[topOfStack--];
+            return topOfStack-1 == -1? null : dataPoints[--topOfStack];
         }
     }
 
     private Node root; //the top element of the tree
-
+    private int sizeOfTree = 0; //size of tree, mainly used for traversing/getting nearest neighbours
     public AdelsonVelskiiLandisTree() {
         this.root = root;
     }
@@ -113,6 +113,7 @@ public class AdelsonVelskiiLandisTree {
     //Calls the recursive function to insert a new row/node into the BST
     public void insert(Row row) {
         this.root = insert(root, row);
+        sizeOfTree++;
     }
 
     //Recursively traverses the tree and then inserts a ney node into the BST
@@ -177,21 +178,19 @@ public class AdelsonVelskiiLandisTree {
         int indexOfNeighbour = 0;
         MyStack nodesLeftToTraverse = new MyStack();
         //Traverses leftmost and then a right until rightmost node.
-        while(currentNode != null || indexOfNeighbour == k) {
+        while(currentNode != null || indexOfNeighbour < sizeOfTree) {
 
             //get leftmost from the current root node
-            while(currentNode != null || indexOfNeighbour == k) {
+            while(currentNode != null) {
                 nodesLeftToTraverse.push(currentNode);
-                nearestNeighbours[indexOfNeighbour++] = currentNode.value;
                 currentNode = currentNode.left;
             }
 
             //goes 1 right to continue traversing
-            if(indexOfNeighbour != k) { //to continue traversing
-                //current node needs to be updated one to the right, since it is currently null after going past leftmost node
-                currentNode = nodesLeftToTraverse.pop().right;
-                nearestNeighbours[indexOfNeighbour++] = currentNode.value;
-            }
+            //current node needs to be updated one to the right, since it is currently null after going past leftmost node
+            currentNode = nodesLeftToTraverse.pop();
+            nearestNeighbours[indexOfNeighbour++] = currentNode.value;
+            currentNode = currentNode.right;
         }
 
         return nearestNeighbours;

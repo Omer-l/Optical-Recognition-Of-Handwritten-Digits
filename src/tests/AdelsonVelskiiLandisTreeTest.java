@@ -58,5 +58,15 @@ public class AdelsonVelskiiLandisTreeTest {
         row8.setDistance(43);
 
 
+        avlTree.insert(row1);
+        avlTree.insert(row2);
+        avlTree.insert(row3);
+        avlTree.insert(row4);
+        avlTree.insert(row5);
+        avlTree.insert(row6);
+        avlTree.insert(row7);
+        avlTree.insert(row8);
+
+        avlTree.getNearestNeighbours(10);
     }
 }
