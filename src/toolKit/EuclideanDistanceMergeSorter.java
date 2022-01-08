@@ -7,82 +7,93 @@ package toolKit;
 public class EuclideanDistanceMergeSorter {
 
     //calls the recursive function to sort.
-    public static void sort(Row sourceDataPoint,Row[] dataPoints) {
-        assignDistances(sourceDataPoint, dataPoints);
+    public static void sort(Row sourceDataPoint,Row[] rows) {
+        assignDistances(sourceDataPoint, rows);
         int beginningIndex = 0;
-        int lastIndex = dataPoints.length - 1;
-        sort(dataPoints, beginningIndex, lastIndex);
+        int lastIndex = rows.length - 1;
+        sort(rows, beginningIndex, lastIndex);
     }
 
-    //Calculates the distance from a source data point to all other data points
-    private static void assignDistances(Row sourceDataPoint,Row[] dataPoints) {
+    //Calculates the distance from a source data point to all other rows/data points
+    private static void assignDistances(Row sourceDataPoint,Row[] rows) {
         //assign distances to data points
-        for(int rowIndex = 0; rowIndex < dataPoints.length; rowIndex++) {
-            Row row = dataPoints[rowIndex];
+        for(Row row : rows) {
             double distanceToRow = sourceDataPoint.getEuclideanDistanceTo(row);
             row.setDistance(distanceToRow);
         }
     }
 
     /** divides and conquers using a merge sort approach.
-     * @param arr   the array to sort
-     * @param l     the beginning index of the array
-     * @param r     the last index of the array
+     * @param rows              the array to sort
+     * @param beginningIndex    the beginning index of the array
+     * @param lastIndex         the last index of the array
      */
-    private static void sort(Row[] arr, int l, int r) {
-        if (l < r) {
+    private static void sort(Row[] rows, int beginningIndex, int lastIndex) {
+        if (beginningIndex < lastIndex) {
             // Find the middle point
-            int m =l+ (r-l)/2;
+            int m =beginningIndex+ (lastIndex-beginningIndex)/2;
 
             // Sort first and second halves
-            sort(arr, l, m);
-            sort(arr, m + 1, r);
+            sort(rows, beginningIndex, m);
+            sort(rows, m + 1, lastIndex);
 
             // Merge the sorted halves
-            merge(arr, l, m, r);
+            divideAndConquer(rows, beginningIndex, m, lastIndex);
         }
     }
 
     /**
-     * merge sorts the divided array
-     * @param arr   the array to sort
-     * @param l     the beginning index of the array
-     * @param m     the middle index of the array
-     * @param r     the last index of the array
+     * Divides and then conquers by sorting the divided arrays
+     * @param rows              is the array to sort
+     * @param beginningIndex    is the beginning index of the array
+     * @param middleIndex       is the middle index of the array
+     * @param lastIndex         is the last index of the array
      */
-    private static void merge(Row[] arr, int l, int m, int r) {
+    private static void divideAndConquer(Row[] rows, int beginningIndex, int middleIndex, int lastIndex) {
         //lengths of the two subarrays, this will be used to merge them
-        int n1 = m - l + 1;
-        int n2 = r - m;
+        int lengthOfSubArray1 = middleIndex - beginningIndex + 1;
+        int lengthOfSubArray2 = lastIndex - middleIndex;
 
-        //arrays for merging
-        Row[] L = new Row[n1];
-        Row[] R = new Row[n2];
+        //arrays for merging, these divide the array
+        Row[] leftArray = new Row[lengthOfSubArray1];
+        Row[] rightArray = new Row[lengthOfSubArray2];
 
-        //copy data into temp arrays
-        for (int i = 0; i < n1; i++)
-            L[i] = arr[l + i];
-        for (int j = 0; j < n2; j++)
-            R[j] = arr[m + 1 + j];
+        //copy data into divided arrays
+        for (int leftArrayIndex = 0; leftArrayIndex < lengthOfSubArray1; leftArrayIndex++)
+            leftArray[leftArrayIndex] = rows[beginningIndex + leftArrayIndex];
+        for (int rightArrayIndex = 0; rightArrayIndex < lengthOfSubArray2; rightArrayIndex++)
+            rightArray[rightArrayIndex] = rows[middleIndex + 1 + rightArrayIndex];
 
-        int i = 0;
-        int j = 0;
+        conquer(rows, leftArray, rightArray, beginningIndex, middleIndex, lastIndex);
+    }
+
+    //Inserts left and right array back into the merged array in sorted order
+    private static void conquer(Row[] rows, Row[] leftArray, Row[] rightArray, int beginningIndex, int middleIndex, int lastIndex) {
+        int leftArrayIndex = 0;
+        int rightArrayIndex = 0;
+        //lengths of the two subarrays, this will be used to merge them
+        int lengthOfSubArray1 = middleIndex - beginningIndex + 1;
+        int lengthOfSubArray2 = lastIndex - middleIndex;
 
         //initial index of the merged subarray
-        int k = l;
-
-        while(i < n1 && j < n2)
-            if(L[i].getDistance() <= R[j].getDistance())
-                arr[k++] = L[i++];
+        int mergedArrayIndex = beginningIndex;
+        //merges the left and right arrays
+        while(leftArrayIndex < lengthOfSubArray1 && rightArrayIndex < lengthOfSubArray2) {
+            double leftDistance = leftArray[leftArrayIndex].getDistance();
+            double rightDistance = rightArray[rightArrayIndex].getDistance();
+            //assigns values to merged array in sorted order
+            if (leftDistance <= rightDistance)
+                rows[mergedArrayIndex++] = leftArray[leftArrayIndex++];
             else
-                arr[k++] = R[j++];
+                rows[mergedArrayIndex++] = rightArray[rightArrayIndex++];
+        }
 
-        /* Remaining elements of L[] */
-        while(i < n1)
-            arr[k++] = L[i++];
+        /* Remaining elements of leftArray[] */
+        while(leftArrayIndex < lengthOfSubArray1)
+            rows[mergedArrayIndex++] = leftArray[leftArrayIndex++];
 
-        /* Remaining elements of R[] */
-        while(j < n2)
-            arr[k++] = R[j++];
+        /* Remaining elements of rightArray[] */
+        while(rightArrayIndex < lengthOfSubArray2)
+            rows[mergedArrayIndex++] = rightArray[rightArrayIndex++];
     }
 }

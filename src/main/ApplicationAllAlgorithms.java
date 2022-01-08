@@ -20,7 +20,7 @@ public class ApplicationAllAlgorithms {
 
     //Runs nearest neighbour (closest euclidean distance).
     public static void runNearestNeighbourAlgorithm() {
-        String algorithmName = "Nearest Neighbour";
+        String algorithmName = "K-Nearest Neighbour";
         int numberOfPossibleClassifications = 10;
         int numberOfNearestNeighbours = 3;
         NearestNeighbour nearestNeighbour = new NearestNeighbour(algorithmName, TRAINING_DATA_SETS, TESTING_DATA_SETS, numberOfPossibleClassifications, numberOfNearestNeighbours);
