@@ -1,6 +1,7 @@
 package nearestNeighbour;
 
 import toolKit.AdelsonVelskiiLandisTree;
+import toolKit.EuclideanDistanceMergeSorter;
 import toolKit.HandwrittenDigitClassifierAlgorithm; //To ensure this class contains necessary functions and variables to be a machine learning algorithm
 import toolKit.Row; //For assigning each row from the dataset
 
@@ -43,43 +44,40 @@ public class NearestNeighbour extends HandwrittenDigitClassifierAlgorithm {
      * @return the closest neighbour
      */
     private int classify(Row newRow) {
-        int classification = -1;
-        AdelsonVelskiiLandisTree avlTree = buildAVLTree(newRow);
-        getKNearestNeighbours(avlTree);
+        int classification = 0;
+        int highestClassificationCount = 0;
+        EuclideanDistanceMergeSorter.sort(newRow, getTrainingRows());
+        int[] nearestNeigboursClassifications = getKNearestNeighboursClassifications();
 
-        return classification;
-    }
+        for(int neighbourIndex = 0; neighbourIndex < numberOfPossibleClassifications; neighbourIndex++) {
+            int classificationCount = nearestNeigboursClassifications[neighbourIndex];
 
-    /**
-     * Builds an AVL Tree for getting the nearest neighbours.
-     * The tree will be sorted based on distance from the datapoint/row.
-     * @return  the AVL tree containing all the training rows from test row
-     */
-    private AdelsonVelskiiLandisTree buildAVLTree(Row testRow) {
-        AdelsonVelskiiLandisTree avlTree = new AdelsonVelskiiLandisTree();
-        Row[] trainingRows = getTrainingRows();
-
-        for (Row row : trainingRows) {
-            row.setDistance(testRow.getEuclideanDistanceTo(row));
-            avlTree.insert(row);
+            if(classificationCount > highestClassificationCount) {
+                highestClassificationCount = classificationCount;
+                classification = neighbourIndex;
+            }
         }
 
-        return avlTree;
+        return classification;
     }
 
     /**
      * After getting a sorted array of distances to all data points, gets the first 'K'
      * neighbouring data points and counts their occurrences.
      *
-     * @param avlTree is a balanced tree built to search
-     * @return an array of integers, where each index represents the occurrence of a classification for a neighbour
+     * @return                      an array of integers, where each index represents the occurrence of a classification for a neighbour
      * (i.e, if the classification is close to where fives' are usually classified, index 4 would ideally have
      * the highest count.)
      */
-    private int[] getKNearestNeighbours(AdelsonVelskiiLandisTree avlTree) {
+    private int[] getKNearestNeighboursClassifications() {
         int[] neighbourClassificationCounter = new int[numberOfPossibleClassifications];
+        Row[] neighbours = getTrainingRows();
 
-        Row[] neighbours = avlTree.getNearestNeighbours(this.K);
+        for(int neighbourIndex = 0; neighbourIndex < K; neighbourIndex++) {
+            Row neighbour = neighbours[neighbourIndex];
+            int classificationOfNeighbour = neighbour.getClassification();
+            neighbourClassificationCounter[classificationOfNeighbour]++;
+        }
 
         return neighbourClassificationCounter;
     }

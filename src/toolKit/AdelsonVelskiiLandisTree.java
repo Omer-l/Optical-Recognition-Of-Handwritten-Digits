@@ -178,7 +178,7 @@ public class AdelsonVelskiiLandisTree {
         int indexOfNeighbour = 0;
         MyStack nodesLeftToTraverse = new MyStack();
         //Traverses leftmost and then a right until rightmost node.
-        while(currentNode != null || indexOfNeighbour < sizeOfTree) {
+        while((currentNode != null || indexOfNeighbour < sizeOfTree) && indexOfNeighbour < k) {
 
             //get leftmost from the current root node
             while(currentNode != null) {
