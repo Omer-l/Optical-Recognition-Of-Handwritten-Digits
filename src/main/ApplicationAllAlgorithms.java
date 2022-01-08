@@ -21,7 +21,9 @@ public class ApplicationAllAlgorithms {
     //Runs nearest neighbour (closest euclidean distance).
     public static void runNearestNeighbourAlgorithm() {
         String algorithmName = "Nearest Neighbour";
-        NearestNeighbour nearestNeighbour = new NearestNeighbour(algorithmName, TRAINING_DATA_SETS, TESTING_DATA_SETS);
+        int numberOfPossibleClassifications = 10;
+        int numberOfNearestNeighbours = 10;
+        NearestNeighbour nearestNeighbour = new NearestNeighbour(algorithmName, TRAINING_DATA_SETS, TESTING_DATA_SETS, numberOfPossibleClassifications, numberOfNearestNeighbours);
         nearestNeighbour.run();
         System.out.println(nearestNeighbour);
     }

@@ -63,7 +63,7 @@ public class AdelsonVelskiiLandisTree {
     }
 
     //Evaluates and returns the lower level
-    private int lowerLevel(int levelOfNode1, int levelOfNode2) {
+    private int getMaxLevel(int levelOfNode1, int levelOfNode2) {
         return levelOfNode1 > levelOfNode2 ? levelOfNode1 : levelOfNode2;
     }
 
@@ -77,8 +77,8 @@ public class AdelsonVelskiiLandisTree {
         subtreeRoot.left = leftRightChild2;
 
         //updates the heights of the adjusted nodes
-        subtreeRoot.level = lowerLevel(level(subtreeRoot.left), level(subtreeRoot.right)) + 1;
-        leftChild.level = lowerLevel(level(leftChild.left), level(leftChild.right)) + 1;
+        subtreeRoot.level = getMaxLevel(level(subtreeRoot.left), level(subtreeRoot.right)) + 1;
+        leftChild.level = getMaxLevel(level(leftChild.left), level(leftChild.right)) + 1;
 
         //return new subtree root
         return leftChild;
@@ -94,8 +94,8 @@ public class AdelsonVelskiiLandisTree {
         subtreeRoot.right = rightChildLeft;
 
         //updates the heights of the adjusted nodes
-        subtreeRoot.level = lowerLevel(level(subtreeRoot.left), level(subtreeRoot.right) + 1);
-        rightChild.level = lowerLevel(level(rightChild.left), level(rightChild.right) + 1);
+        subtreeRoot.level = getMaxLevel(level(subtreeRoot.left), level(subtreeRoot.right) + 1);
+        rightChild.level = getMaxLevel(level(rightChild.left), level(rightChild.right) + 1);
 
         //return new subtree's root
         return rightChild;
@@ -131,7 +131,7 @@ public class AdelsonVelskiiLandisTree {
             return root;
 
         //Updates height of this root node
-        root.level = lowerLevel(level(root.left), level(root.right)) + 1;
+        root.level = getMaxLevel(level(root.left), level(root.right)) + 1;
 
         //Gets the balance of this root node to check whether it has become balanced.
         int balance = getBalance(root);
@@ -143,7 +143,7 @@ public class AdelsonVelskiiLandisTree {
             return rightRotate(root);
 
         //Right Right Case
-        if(balance > 1 && newKey < root.right.key)
+        if(balance < -1 && newKey > root.right.key)
             return leftRotate(root);
 
         //Left Right Case

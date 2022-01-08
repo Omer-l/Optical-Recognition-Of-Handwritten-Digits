@@ -13,7 +13,7 @@ public class KNearestNeighboursTest {
 
     @Test
     public void getDistanceToAllDataPoints() {
-        NearestNeighbour nearestNeighbour = new NearestNeighbour("Nearest Neigbour", TRAINING_DATA_SETS, TESTING_DATA_SETS);
+        NearestNeighbour nearestNeighbour = new NearestNeighbour("Nearest Neigbour", TRAINING_DATA_SETS, TESTING_DATA_SETS, 10, 10);
 
         nearestNeighbour.run();
     }
