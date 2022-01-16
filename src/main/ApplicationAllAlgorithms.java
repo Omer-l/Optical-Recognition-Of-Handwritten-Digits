@@ -22,10 +22,10 @@ public class ApplicationAllAlgorithms {
     public static void runNearestNeighbourAlgorithm() {
         String algorithmName = "K-Nearest Neighbour";
         int numberOfPossibleClassifications = 10;
-        int numberOfNearestNeighbours = 3;
-        NearestNeighbour nearestNeighbour = new NearestNeighbour(algorithmName, TRAINING_DATA_SETS, TESTING_DATA_SETS, numberOfPossibleClassifications, numberOfNearestNeighbours);
+        int numberOfNearestNeighbours = 1;
+        NearestNeighbour nearestNeighbour = new NearestNeighbour(algorithmName, TESTING_DATA_SETS, TRAINING_DATA_SETS, numberOfPossibleClassifications, numberOfNearestNeighbours);
         nearestNeighbour.run();
-        System.out.println(nearestNeighbour);
+//        System.out.println(nearestNeighbour);
     }
 
 }

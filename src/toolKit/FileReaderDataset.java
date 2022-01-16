@@ -23,7 +23,6 @@ public class FileReaderDataset {
 	 * @return an array of Rows
 	 */
 	public Row[] getData() {
-
 		Row[] points = new Row[getNumberOfLines()];
 		int rowIndex = 0;
 

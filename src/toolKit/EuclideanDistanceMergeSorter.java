@@ -31,7 +31,7 @@ public class EuclideanDistanceMergeSorter {
     private static void sort(Row[] rows, int beginningIndex, int lastIndex) {
         if (beginningIndex < lastIndex) {
             // Find the middle point
-            int m =beginningIndex+ (lastIndex-beginningIndex)/2;
+            int m = beginningIndex+ (lastIndex - beginningIndex) / 2;
 
             // Sort first and second halves
             sort(rows, beginningIndex, m);

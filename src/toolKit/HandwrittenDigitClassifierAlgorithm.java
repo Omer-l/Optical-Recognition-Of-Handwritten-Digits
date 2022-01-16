@@ -1,7 +1,7 @@
 package toolKit;
 
 public abstract class HandwrittenDigitClassifierAlgorithm {
-    private final Row[] trainingRows;
+    private Row[] trainingRows; //can vary if test rows are added as training rows.
     private final Row[] testRows;
     private final String algorithmName;
     private int correctClassificationCounter = 0; //counter for correct classifications
@@ -36,6 +36,10 @@ public abstract class HandwrittenDigitClassifierAlgorithm {
         return testRows;
     }
 
+    public void setTrainingRows(Row[] trainingRows) {
+        this.trainingRows = trainingRows;
+    }
+
     public String getAlgorithmName() {
         return algorithmName;
     }
@@ -46,6 +50,14 @@ public abstract class HandwrittenDigitClassifierAlgorithm {
 
     public int getIncorrectClassificationCounter() {
         return incorrectClassificationCounter;
+    }
+
+    public void setCorrectClassificationCounter(int correctClassificationCounter) {
+        this.correctClassificationCounter = correctClassificationCounter;
+    }
+
+    public void setIncorrectClassificationCounter(int incorrectClassificationCounter) {
+        this.incorrectClassificationCounter = incorrectClassificationCounter;
     }
 
     @Override

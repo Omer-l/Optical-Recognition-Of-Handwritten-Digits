@@ -23,36 +23,49 @@ public class NearestNeighbour extends HandwrittenDigitClassifierAlgorithm {
     //runs the algorithm
     @Override
     public void run() {
+        Row[] allTrainingRows = getTrainingRows();
+        int folds = 1;
+        int sizeOfK =  allTrainingRows.length / folds;
+        for(int currentFold = 0; currentFold < folds; currentFold++) {
+            int beginningIndex = currentFold * sizeOfK;
+            int endIndex = (currentFold+1) * sizeOfK;
+            Row[] newTrainingRow = new Row[sizeOfK];
+            System.arraycopy(getTrainingRows(), beginningIndex, newTrainingRow, 0, sizeOfK);
 
-        for (Row testRow : getTestRows()) {
-            //gets classification based on euclidean distance
-            int actualClassificationOfRow = classify(testRow);
-            int expectedClassificationOfRow = testRow.getClassification();
-
-            //tests whether learning approach gave the right classification.
-            if (actualClassificationOfRow == expectedClassificationOfRow)
-                add1Correct();
-            else
-                add1Incorrect();
+            for (Row testRow : getTestRows()) {
+                //gets classification based on euclidean distance
+                int actualClassificationOfRow = classify(testRow, newTrainingRow);
+                int expectedClassificationOfRow = testRow.getClassification();
+//k=10, 3, 5, *7*, **8**, ***9***
+                //tests whether learning approach gave the right classification.
+                if (actualClassificationOfRow == expectedClassificationOfRow)
+                    add1Correct();
+                else
+                    add1Incorrect();
+            }
+            System.out.println(this);
+            setCorrectClassificationCounter(0);
+            setIncorrectClassificationCounter(0);
         }
     }
 
     /**
      * classifies new handwritten data by finding closest euclidean distance of the trained data, and then returns the index of that row.
      *
-     * @param newRow the row to classify
-     * @return the closest neighbour
+     * @param newRow        the row to classify
+     * @param trainingRows  are the training rows
+     * @return              the closest neighbour
      */
-    private int classify(Row newRow) {
+    private int classify(Row newRow, Row[] trainingRows) {
         int classification = 0;
         int highestClassificationCount = 0;
-        EuclideanDistanceMergeSorter.sort(newRow, getTrainingRows());
-        int[] nearestNeigboursClassifications = getKNearestNeighboursClassifications();
+        EuclideanDistanceMergeSorter.sort(newRow, trainingRows);
+        int[] nearestNeigboursClassifications = getKNearestNeighboursClassifications(trainingRows);
 
-        for(int neighbourIndex = 0; neighbourIndex < numberOfPossibleClassifications; neighbourIndex++) {
+        for (int neighbourIndex = 0; neighbourIndex < numberOfPossibleClassifications; neighbourIndex++) {
             int classificationCount = nearestNeigboursClassifications[neighbourIndex];
 
-            if(classificationCount > highestClassificationCount) {
+            if (classificationCount > highestClassificationCount) {
                 highestClassificationCount = classificationCount;
                 classification = neighbourIndex;
             }
@@ -64,16 +77,15 @@ public class NearestNeighbour extends HandwrittenDigitClassifierAlgorithm {
     /**
      * After getting a sorted array of distances to all data points, gets the first 'K'
      * neighbouring data points and counts their occurrences.
-     *
-     * @return                      an array of integers, where each index represents the occurrence of a classification for a neighbour
+     * @param neighbours    the training rows in sorted order
+     * @return an array of integers, where each index represents the occurrence of a classification for a neighbour
      * (i.e, if the classification is close to where fives' are usually classified, index 4 would ideally have
      * the highest count.)
      */
-    private int[] getKNearestNeighboursClassifications() {
+    private int[] getKNearestNeighboursClassifications(Row[] neighbours) {
         int[] neighbourClassificationCounter = new int[numberOfPossibleClassifications];
-        Row[] neighbours = getTrainingRows();
 
-        for(int neighbourIndex = 0; neighbourIndex < K; neighbourIndex++) {
+        for (int neighbourIndex = 0; neighbourIndex < K; neighbourIndex++) {
             Row neighbour = neighbours[neighbourIndex];
             int classificationOfNeighbour = neighbour.getClassification();
             neighbourClassificationCounter[classificationOfNeighbour]++;
