@@ -24,37 +24,25 @@ public class NearestNeighbour extends HandwrittenDigitClassifierAlgorithm {
     @Override
     public void run() {
         Row[] allTrainingRows = getTrainingRows();
-        int folds = 1;
-        int sizeOfK =  allTrainingRows.length / folds;
-        for(int currentFold = 0; currentFold < folds; currentFold++) {
-            int beginningIndex = currentFold * sizeOfK;
-            int endIndex = (currentFold+1) * sizeOfK;
-            Row[] newTrainingRow = new Row[sizeOfK];
-            System.arraycopy(getTrainingRows(), beginningIndex, newTrainingRow, 0, sizeOfK);
+        for (Row testRow : getTestRows()) {
+            //gets classification based on euclidean distance
+            int actualClassificationOfRow = classify(testRow, allTrainingRows);
+            int expectedClassificationOfRow = testRow.getClassification();
 
-            for (Row testRow : getTestRows()) {
-                //gets classification based on euclidean distance
-                int actualClassificationOfRow = classify(testRow, newTrainingRow);
-                int expectedClassificationOfRow = testRow.getClassification();
-//k=10, 3, 5, *7*, **8**, ***9***
-                //tests whether learning approach gave the right classification.
-                if (actualClassificationOfRow == expectedClassificationOfRow)
-                    add1Correct();
-                else
-                    add1Incorrect();
-            }
-            System.out.println(this);
-            setCorrectClassificationCounter(0);
-            setIncorrectClassificationCounter(0);
+            //tests whether learning approach gave the right classification.
+            if (actualClassificationOfRow == expectedClassificationOfRow)
+                add1Correct();
+            else
+                add1Incorrect();
         }
-    }
+}
 
     /**
      * classifies new handwritten data by finding closest euclidean distance of the trained data, and then returns the index of that row.
      *
-     * @param newRow        the row to classify
-     * @param trainingRows  are the training rows
-     * @return              the closest neighbour
+     * @param newRow       the row to classify
+     * @param trainingRows are the training rows
+     * @return the closest neighbour
      */
     private int classify(Row newRow, Row[] trainingRows) {
         int classification = 0;
@@ -77,7 +65,8 @@ public class NearestNeighbour extends HandwrittenDigitClassifierAlgorithm {
     /**
      * After getting a sorted array of distances to all data points, gets the first 'K'
      * neighbouring data points and counts their occurrences.
-     * @param neighbours    the training rows in sorted order
+     *
+     * @param neighbours the training rows in sorted order
      * @return an array of integers, where each index represents the occurrence of a classification for a neighbour
      * (i.e, if the classification is close to where fives' are usually classified, index 4 would ideally have
      * the highest count.)

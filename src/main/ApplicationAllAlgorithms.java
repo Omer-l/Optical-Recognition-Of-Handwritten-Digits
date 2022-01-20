@@ -25,7 +25,7 @@ public class ApplicationAllAlgorithms {
         int numberOfNearestNeighbours = 1;
         NearestNeighbour nearestNeighbour = new NearestNeighbour(algorithmName, TESTING_DATA_SETS, TRAINING_DATA_SETS, numberOfPossibleClassifications, numberOfNearestNeighbours);
         nearestNeighbour.run();
-//        System.out.println(nearestNeighbour);
+        System.out.println(nearestNeighbour);
     }
 
 }
