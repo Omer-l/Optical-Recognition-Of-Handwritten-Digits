@@ -1,6 +1,6 @@
 package main;
 
-import nearestNeighbour.NearestNeighbour; //Nearest Neighbour algorithm
+import kNearestNeighbours.NearestNeighbour; //Nearest Neighbour algorithm
 import toolKit.*; //For reading in the data and creating an array of Rows.
 
 /**
@@ -11,21 +11,49 @@ import toolKit.*; //For reading in the data and creating an array of Rows.
 public class ApplicationAllAlgorithms {
     private final static FileReaderDataset TRAINING_FILE_READER = new FileReaderDataset("dataset1.csv"); //for training file reading
     private final static FileReaderDataset TESTING_FILE_READER = new FileReaderDataset("dataset2.csv"); //for testing file reading
+
+    //1ST FOLD
     private final static Row[] TRAINING_DATA_SETS = TRAINING_FILE_READER.getData(); //training data
     private final static Row[] TESTING_DATA_SETS = TESTING_FILE_READER.getData(); //test data
+    //2ND FOLD
+    private final static Row[] TRAINING_DATA_SETS_2 = TESTING_FILE_READER.getData(); //training data
+    private final static Row[] TESTING_DATA_SETS_2 = TRAINING_FILE_READER.getData(); //test data
+    private final static int NUMBER_OF_POSSIBLE_CLASSIFICATIONS = 10;
+    private final static double NUMBER_OF_FOLDS = 2;
 
     public static void main(String[] args) {
-        runNearestNeighbourAlgorithm(); //Nearest neighbour algorithm run and output results
+        run2FoldTestOnNearestNeighbourAlgorithm();
+    }
+
+    //Performs 2-fold test on nearest neighbour algorithm
+    private static void run2FoldTestOnNearestNeighbourAlgorithm() {
+        int firstFold = 1;
+        int secondFold = 2;
+        double firstFoldAccuracy = runNearestNeighbourAlgorithm(TRAINING_DATA_SETS, TESTING_DATA_SETS, firstFold); //Nearest neighbour algorithm run and output results
+        double secondFoldAccuracy = runNearestNeighbourAlgorithm(TRAINING_DATA_SETS_2, TESTING_DATA_SETS_2, secondFold); //Nearest neighbour algorithm run and output results
+        double averageOfTheTwoNearestNeighbours = (firstFoldAccuracy + secondFoldAccuracy) / NUMBER_OF_FOLDS;
+        String resultOfNearestNeighbour = "Average of 2 fold test for K-nearest neighbours algorithm: " + averageOfTheTwoNearestNeighbours;
+        System.out.println(resultOfNearestNeighbour);
     }
 
     //Runs nearest neighbour (closest euclidean distance).
-    public static void runNearestNeighbourAlgorithm() {
-        String algorithmName = "K-Nearest Neighbour";
-        int numberOfPossibleClassifications = 10;
-        int numberOfNearestNeighbours = 1;
-        NearestNeighbour nearestNeighbour = new NearestNeighbour(algorithmName, TESTING_DATA_SETS, TRAINING_DATA_SETS, numberOfPossibleClassifications, numberOfNearestNeighbours);
-        nearestNeighbour.run();
-        System.out.println(nearestNeighbour);
+    public static double runNearestNeighbourAlgorithm(Row[] dataset1, Row[] dataset2, int foldNumber) {
+        NearestNeighbour bestNearestNeighbour = null;
+        double bestAccuracy = Double.MIN_VALUE;
+        int maximumNumberOfNeighbours = 11;
+        //rerun nearest neighbour algorithm, each time increment the number of nearest neighbour
+        for(int numberOfNearestNeighbours = 1; numberOfNearestNeighbours <= maximumNumberOfNeighbours; numberOfNearestNeighbours++) {
+            String algorithmName = "K-Nearest Neighbour Fold " + foldNumber;
+            NearestNeighbour nearestNeighbour = new NearestNeighbour(algorithmName, dataset2, dataset1, NUMBER_OF_POSSIBLE_CLASSIFICATIONS, numberOfNearestNeighbours);
+            nearestNeighbour.run();
+            double accuracy = nearestNeighbour.getAccuracy();
+            if(accuracy > bestAccuracy) { //updates nearest neighbour algorithm that found a better result
+                bestNearestNeighbour = nearestNeighbour;
+                bestAccuracy = accuracy;
+            }
+        }
+        System.out.println(bestNearestNeighbour); //outputs result of the algorithm with the best number of nearest neighbours
+        return bestAccuracy;
     }
 
 }

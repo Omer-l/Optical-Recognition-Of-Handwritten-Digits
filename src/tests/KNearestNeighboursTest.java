@@ -1,6 +1,6 @@
 package tests;
 
-import nearestNeighbour.NearestNeighbour;
+import kNearestNeighbours.NearestNeighbour;
 import org.junit.Test;
 import toolKit.FileReaderDataset;
 import toolKit.Row;

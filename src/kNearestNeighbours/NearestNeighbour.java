@@ -1,6 +1,5 @@
-package nearestNeighbour;
+package kNearestNeighbours;
 
-import toolKit.AdelsonVelskiiLandisTree;
 import toolKit.EuclideanDistanceMergeSorter;
 import toolKit.HandwrittenDigitClassifierAlgorithm; //To ensure this class contains necessary functions and variables to be a machine learning algorithm
 import toolKit.Row; //For assigning each row from the dataset
@@ -81,5 +80,14 @@ public class NearestNeighbour extends HandwrittenDigitClassifierAlgorithm {
         }
 
         return neighbourClassificationCounter;
+    }
+
+    @Override
+    public String toString() {
+        //output results
+        double accuracy = getAccuracy();
+        double errorRate = MAX_PERCENTAGE - accuracy;
+
+        return "ALGORITHM NAME: \t\t\t" + algorithmName + "\nNUMBER OF NEIGHBOURS: \t\t" + K + "\nCORRECT CLASSIFICATIONS: \t" + correctClassificationCounter + "\nINCORRECT CLASSIFICATIONS: \t" + incorrectClassificationCounter + "\nACCURACY: \t\t\t\t\t" + accuracy + "%\nERROR RATE: \t\t\t\t" + accuracy;
     }
 }
