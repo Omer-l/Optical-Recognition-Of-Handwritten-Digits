@@ -3,9 +3,10 @@ package toolKit;
 public abstract class HandwrittenDigitClassifierAlgorithm {
     private Row[] trainingRows; //can vary if test rows are added as training rows.
     private final Row[] testRows;
-    private final String algorithmName;
-    private int correctClassificationCounter = 0; //counter for correct classifications
-    private int incorrectClassificationCounter = 0;//counter for incorrect classifications
+    public final String algorithmName;
+    public int correctClassificationCounter = 0; //counter for correct classifications
+    public int incorrectClassificationCounter = 0;//counter for incorrect classifications
+    public final static double MAX_PERCENTAGE = 100;
 
     public HandwrittenDigitClassifierAlgorithm(String algorithmName, Row[] trainingRows, Row[] testRows) {
         this.algorithmName = algorithmName.toUpperCase();
@@ -60,12 +61,16 @@ public abstract class HandwrittenDigitClassifierAlgorithm {
         this.incorrectClassificationCounter = incorrectClassificationCounter;
     }
 
+    public double getAccuracy() {
+        return ((double)correctClassificationCounter / testRows.length) * MAX_PERCENTAGE;
+    }
+
     @Override
     public String toString() {
         //output results
-        double accuracy = ((double)correctClassificationCounter / testRows.length) * 100.00;
-        double errorRate = 100.0 - accuracy;
+        double accuracy = getAccuracy();
+        double errorRate = MAX_PERCENTAGE - accuracy;
 
-        return "ALGORITHM NAME: \t\t\t" + algorithmName + "\nCORRECT CLASSIFICATIONS: \t" + correctClassificationCounter + "\nINCORRECT CLASSIFICATIONS: \t" + incorrectClassificationCounter + "\nACCURACY: \t\t\t\t\t" + accuracy + "%\nERROR RATE: \t\t\t\t" + errorRate;
+        return "ALGORITHM NAME: \t\t\t" + algorithmName + "\nCORRECT CLASSIFICATIONS: \t" + correctClassificationCounter + "\nINCORRECT CLASSIFICATIONS: \t" + incorrectClassificationCounter + "\nACCURACY: \t\t\t\t\t" + accuracy + "%\nERROR RATE: \t\t\t\t" + accuracy;
     }
 }

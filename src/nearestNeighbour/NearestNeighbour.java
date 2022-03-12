@@ -1,85 +1,88 @@
 package nearestNeighbour;
 
-import toolKit.AdelsonVelskiiLandisTree;
 import toolKit.EuclideanDistanceMergeSorter;
-import toolKit.HandwrittenDigitClassifierAlgorithm; //To ensure this class contains necessary functions and variables to be a machine learning algorithm
-import toolKit.Row; //For assigning each row from the dataset
+import toolKit.HandwrittenDigitClassifierAlgorithm;
+import toolKit.Row;
 
-/**
- * This class has the functions to get the training row (nearest neighbour) for each test row.
- * Uses Euclidean distance to achieve this.
- * OUTPUT: correct: 2755... incorrect: 55... = 98.04% accuracy
- */
 public class NearestNeighbour extends HandwrittenDigitClassifierAlgorithm {
     private final int numberOfPossibleClassifications; //digits vary from 0 to 9.
-    private final int K; //number of nearest neighbours
-
-    public NearestNeighbour(String algorithmName, Row[] trainingRows, Row[] testRows, int numberOfPossibleClassifications, int K) {
+    public NearestNeighbour(String algorithmName, Row[] trainingRows, Row[] testRows, int numberOfPossibleClassifications) {
         super(algorithmName, trainingRows, testRows);
         this.numberOfPossibleClassifications = numberOfPossibleClassifications;
-        this.K = K;
     }
 
     //runs the algorithm
     @Override
     public void run() {
-        Row[] allTrainingRows = getTrainingRows();
-        for (Row testRow : getTestRows()) {
+
+        for(Row testRow : getTestRows()) {
             //gets classification based on euclidean distance
-            int actualClassificationOfRow = classify(testRow, allTrainingRows);
+            int actualClassificationOfRow = classify(testRow);
             int expectedClassificationOfRow = testRow.getClassification();
 
             //tests whether learning approach gave the right classification.
-            if (actualClassificationOfRow == expectedClassificationOfRow)
+            if(actualClassificationOfRow == expectedClassificationOfRow)
                 add1Correct();
             else
                 add1Incorrect();
         }
-}
+    }
 
-    /**
-     * classifies new handwritten data by finding closest euclidean distance of the trained data, and then returns the index of that row.
+    /** classifies new handwritten data by finding closest euclidean distance of the trained data, and then returns the index of that row.
      *
-     * @param newRow       the row to classify
-     * @param trainingRows are the training rows
-     * @return the closest neighbour
+     * @param newRow    the row to classify
+     * @return          the closest neighbour
      */
-    private int classify(Row newRow, Row[] trainingRows) {
-        int classification = 0;
-        int highestClassificationCount = 0;
-        EuclideanDistanceMergeSorter.sort(newRow, trainingRows);
-        int[] nearestNeigboursClassifications = getKNearestNeighboursClassifications(trainingRows);
+    private int classify(Row newRow) {
+        int closestNeighbourIndex = -1;
+        double closestNeighbourDistance = Double.MAX_VALUE;
+        Row[] trainingRows = getTrainingRows();
 
-        for (int neighbourIndex = 0; neighbourIndex < numberOfPossibleClassifications; neighbourIndex++) {
-            int classificationCount = nearestNeigboursClassifications[neighbourIndex];
+        //gets closest euclidean distance
+        for(int rowIndex = 0; rowIndex < trainingRows.length; rowIndex++) {
+            Row neighbour = trainingRows[rowIndex];
 
-            if (classificationCount > highestClassificationCount) {
-                highestClassificationCount = classificationCount;
-                classification = neighbourIndex;
+            double distanceToNeighbour = newRow.getEuclideanDistanceTo(neighbour);
+
+            //closer than current closest neighbour?
+            if(distanceToNeighbour < closestNeighbourDistance) {
+                closestNeighbourIndex = rowIndex;
+                closestNeighbourDistance = distanceToNeighbour;
             }
         }
 
-        return classification;
+        return trainingRows[closestNeighbourIndex].getClassification();
     }
 
     /**
-     * After getting a sorted array of distances to all data points, gets the first 'K'
+     * After getting a sorted array of distances to all data points, gets the first 'k'
      * neighbouring data points and counts their occurrences.
-     *
-     * @param neighbours the training rows in sorted order
-     * @return an array of integers, where each index represents the occurrence of a classification for a neighbour
-     * (i.e, if the classification is close to where fives' are usually classified, index 4 would ideally have
-     * the highest count.)
+     * @param k     is the number of desired neighbouring occurences
+     * @return      an array of integers, where each index represents the occurrence of a classification for a neighbour
+     *              (i.e, if the classification is close to where fives' are usually classified, index 4 would ideally have
+     *              the highest count.)
      */
-    private int[] getKNearestNeighboursClassifications(Row[] neighbours) {
-        int[] neighbourClassificationCounter = new int[numberOfPossibleClassifications];
+    public int[] getKNearestNeighbours(int k) {
+        int[] neighbourCounter = new int[numberOfPossibleClassifications];
+        //sort all training data based on euclidean distance from point.
 
-        for (int neighbourIndex = 0; neighbourIndex < K; neighbourIndex++) {
-            Row neighbour = neighbours[neighbourIndex];
-            int classificationOfNeighbour = neighbour.getClassification();
-            neighbourClassificationCounter[classificationOfNeighbour]++;
+        return neighbourCounter;
+    }
+
+    /**
+     * Calculates distance to all data points (Rows) in the dataset
+     * @param fromDataPoint     is the row to calculate distance to all other datapoints from
+     * @return                  a sorted array of distances to all data points.
+     */
+    public double[] getDistanceToAllDataPoints(Row fromDataPoint) {
+        Row[] trainingRows = getTrainingRows();
+        double[] distanceToAllDataPoints = new double[trainingRows.length];//distance to all points
+
+        for(int dataPointIndex = 0; dataPointIndex < trainingRows.length; dataPointIndex++) {
+            Row toDataPoint = trainingRows[dataPointIndex];
+            distanceToAllDataPoints[dataPointIndex] = fromDataPoint.getEuclideanDistanceTo(toDataPoint);
         }
 
-        return neighbourClassificationCounter;
+        return distanceToAllDataPoints;
     }
 }
