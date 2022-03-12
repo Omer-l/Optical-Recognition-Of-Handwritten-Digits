@@ -25,7 +25,7 @@ public class ApplicationAllAlgorithms {
     private final static int SECOND_FOLD = 2;
 
     public static void main(String[] args) {
-//        run2FoldTestOnKnearestNeighbourAlgorithm();
+        run2FoldTestOnKnearestNeighbourAlgorithm();
 //        run2FoldTestOnNearestNeighbourAlgorithm();
     }
 

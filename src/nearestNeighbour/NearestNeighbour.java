@@ -85,4 +85,13 @@ public class NearestNeighbour extends HandwrittenDigitClassifierAlgorithm {
 
         return distanceToAllDataPoints;
     }
+
+    @Override
+    public String toString() {
+        //output results
+        double accuracy = getAccuracy();
+        double errorRate = MAX_PERCENTAGE - accuracy;
+
+        return "ALGORITHM NAME: \t\t\t" + algorithmName + "\nCORRECT CLASSIFICATIONS: \t" + correctClassificationCounter + "\nINCORRECT CLASSIFICATIONS: \t" + incorrectClassificationCounter + "\nACCURACY: \t\t\t\t\t" + accuracy + "%\nERROR RATE: \t\t\t\t" + accuracy;
+    }
 }
