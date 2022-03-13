@@ -74,10 +74,51 @@ public class SupportVectorMachines extends HandwrittenDigitClassifierAlgorithm {
         return perceptrons;
     }
 
+    /**
+     * Extracts the weights from each perceptron
+     * @param perceptrons
+     * @return
+     */
+    private double[][] getWeightsOfEachPerceptron(Perceptron[][] perceptrons) {
+        double[][] weightsOfEachPerceptron = new double[perceptrons.length][];
+        for(int perceptronIndex = 0; perceptronIndex < perceptrons.length; perceptronIndex++) {
+            Perceptron bestPerceptron = perceptrons[perceptronIndex][0]; //for now just first perceptron, TODO GET BEST PERCEPTRON IN ARRAY
+            weightsOfEachPerceptron[perceptronIndex] = bestPerceptron.getWeights();
+        }
+
+        return weightsOfEachPerceptron;
+    }
+
+    private int getActualClassification(Perceptron[][] perceptrons, double[] augX) {
+        int actualClassification = 0; //temporarily 0
+        //count up the votes
+        for (int perceptronIndex = 0; perceptronIndex < perceptrons.length; perceptronIndex++) {
+            double[] weights = perceptrons[perceptronIndex][0].getWeights(); //for now attempt 1 line. so index 0
+            int prediction = MatrixUtilities.getHypothesis(augX, weights); //if -1, then not that category, if 1, then it is possibly that digit
+
+            if (prediction == 1)
+                actualClassification = perceptronIndex;
+        }
+
+        return actualClassification;
+    }
     @Override
     public void run() {
         //initialise each perceptron
         Perceptron[][] perceptrons = initialisePerceptrons();
+        double[][] weightsOfEachPerceptron = getWeightsOfEachPerceptron(perceptrons);
+        Row[] testRows = getTestRows();
+        for(int testRowIndex = 0; testRowIndex < getTestRows().length; testRowIndex++) {
+            Row testRow = testRows[testRowIndex];
+            double[] rowInputs = testRow.getInputs();
+            double[] augX = augmentX(rowInputs);
+            int expectedClassification = (int)testRow.getClassification();
+            int actualClassification = getActualClassification(perceptrons, augX);
 
+            if(expectedClassification == actualClassification)
+                correctClassificationCounter++;
+            else
+                incorrectClassificationCounter++;
+        }
     }
 }

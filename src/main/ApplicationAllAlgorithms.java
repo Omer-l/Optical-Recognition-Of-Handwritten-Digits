@@ -36,7 +36,8 @@ public class ApplicationAllAlgorithms {
     private static void run2FoldTestOnNearestNeighbourAlgorithm() {
         double firstFoldAccuracy = runNearestNeighbourAlgorithm(TRAINING_DATA_SETS, TESTING_DATA_SETS, FIRST_FOLD); //Nearest neighbour algorithm run and output results
         double secondFoldAccuracy = runNearestNeighbourAlgorithm(TRAINING_DATA_SETS_2, TESTING_DATA_SETS_2, SECOND_FOLD); //Nearest neighbour algorithm run and output results
-        double averageOfTheTwoNearestNeighbours = (firstFoldAccuracy + secondFoldAccuracy) / NUMBER_OF_FOLDS;
+        double averageOfTheTwoNearestNeighbours = (firstFoldAccuracy + firstFoldAccuracy) / NUMBER_OF_FOLDS;
+//        double averageOfTheTwoNearestNeighbours = (firstFoldAccuracy + secondFoldAccuracy) / NUMBER_OF_FOLDS;
         String resultOfNearestNeighbour = "Average of 2 fold test for Nearest Neighbour algorithm: " + averageOfTheTwoNearestNeighbours;
         System.out.println(resultOfNearestNeighbour);
     }
@@ -101,7 +102,7 @@ public class ApplicationAllAlgorithms {
     //Runs SVM algorithm
     public static double runSVM(Row[] dataset1, Row[] dataset2, int foldNumber) {
         //rerun nearest neighbour algorithm, each time increment the number of nearest neighbour
-        String algorithmName = "Support Vector Machines" + foldNumber;
+        String algorithmName = "Support Vector Machines fold " + foldNumber;
         SupportVectorMachines supportVectorMachines = new SupportVectorMachines(algorithmName, dataset2, dataset1, NUMBER_OF_POSSIBLE_CLASSIFICATIONS);
         supportVectorMachines.run();
         double accuracy = supportVectorMachines.getAccuracy();
