@@ -9,6 +9,7 @@ public class SupportVectorMachines extends HandwrittenDigitClassifierAlgorithm {
     private final int numberOfPossibleClassifications; //digits vary from 0 to 9.
     private double[] classifications;
     private double[][] X;
+    private final int numberOfPerceptrons = 22;
 
     public SupportVectorMachines(String algorithmName, Row[] trainingRows, Row[] testRows, int numberOfPossibleClassifications) {
         super(algorithmName, trainingRows, testRows);
@@ -47,7 +48,7 @@ public class SupportVectorMachines extends HandwrittenDigitClassifierAlgorithm {
     }
 
     //Creates a binary classification for given desired classifications
-    private Perceptron[] getClassification(double desiredClassification) {
+    private Perceptron[] getClassification(double[] desiredClassification) {
 
         //Transform the NUMBER_OF_CLASSIFICATIONS classifications into NUMBER_OF_CLASSIFICATIONS binary class problems
         double[] binaryClassifications = MatrixUtilities.getBinaryClassifications(classifications, desiredClassification);
@@ -61,13 +62,53 @@ public class SupportVectorMachines extends HandwrittenDigitClassifierAlgorithm {
         return p;
     }
 
+    //Creates a tree of classifications for creating perceptrons
+    private double[][] initialiseAllDesiredClassifications() {
+        double[][] allDesiredClassifications = new double[numberOfPerceptrons][NUMBER_OF_LINES_ATTEMPTS_PER_CLASSIFICATION];
+        //Branches from Level 0
+        allDesiredClassifications[0] = new double[]{1, 2, 4, 5, 7}; //L
+        allDesiredClassifications[1] = new double[]{0, 3, 5, 6, 8, 9}; //R
+        //Branches from Level 1
+        allDesiredClassifications[2] = new double[]{1, 7}; //LL
+        allDesiredClassifications[3] = new double[]{2, 4, 5, 7};//LR
+        allDesiredClassifications[4] = new double[]{5,6};//RL
+        allDesiredClassifications[5] = new double[]{0, 3, 8, 9};//RR
+        //Branches from Level 2
+        allDesiredClassifications[6] = new double[]{1};//LLL
+        allDesiredClassifications[7] = new double[]{7};//LLR
+        allDesiredClassifications[8] = new double[]{7, 4};//LRL
+        allDesiredClassifications[9] = new double[]{2, 5};//LRR
+        allDesiredClassifications[10] = new double[]{5};//RLL
+        allDesiredClassifications[11] = new double[]{6};//RLR
+        allDesiredClassifications[12] = new double[]{3, 8};//RRL
+        allDesiredClassifications[13] = new double[]{0, 9};//RRR
+        //Branches from Level 3
+        allDesiredClassifications[14] = new double[]{7};//LRLL
+        allDesiredClassifications[15] = new double[]{4};//LRLR
+        allDesiredClassifications[16] = new double[]{2};//LRRL
+        allDesiredClassifications[17] = new double[]{5};//LRRR
+        allDesiredClassifications[18] = new double[]{3};//RRLL
+        allDesiredClassifications[19] = new double[]{8};//RRLR
+        allDesiredClassifications[20] = new double[]{0};//RRRL
+        allDesiredClassifications[21] = new double[]{9};//RRRR
+
+        return allDesiredClassifications;
+    }
+
     //Creates 10 perceptrons, 1 for each classification
     private Perceptron[][] initialisePerceptrons() {
         Perceptron[][] perceptrons = new Perceptron[numberOfPossibleClassifications][NUMBER_OF_LINES_ATTEMPTS_PER_CLASSIFICATION];
 
         for(int desiredClassification = 0; desiredClassification < numberOfPossibleClassifications; desiredClassification++) {
-            perceptrons[desiredClassification] = getClassification(desiredClassification); //find perceptron for desired classification
+            double[] classifications = {desiredClassification};
+            perceptrons[desiredClassification] = getClassification(classifications); //find perceptron for desired classification
         }
+//        double[][] allDesiredClassifications = initialiseAllDesiredClassifications();
+//        Perceptron[][] testPerceptrons = new Perceptron[numberOfPerceptrons][NUMBER_OF_LINES_ATTEMPTS_PER_CLASSIFICATION];
+//        for(int allDesiredClassificationsIndex = 0; allDesiredClassificationsIndex < allDesiredClassifications.length; allDesiredClassificationsIndex++) {
+//            double[] desiredClassifications = allDesiredClassifications[allDesiredClassificationsIndex];
+//            testPerceptrons[allDesiredClassificationsIndex] = getClassification(desiredClassifications);
+//        }
         return perceptrons;
     }
 

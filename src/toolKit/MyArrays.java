@@ -14,7 +14,7 @@ public class MyArrays {
     public static String toString(double[] doubleArray) {
         String arrayToString = "";
         for (double arrayElement : doubleArray)
-            arrayToString += " " + (arrayElement + 1);
+            arrayToString += " " + (arrayElement);
         return arrayToString;
     }
 

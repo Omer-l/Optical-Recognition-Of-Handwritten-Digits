@@ -61,10 +61,26 @@ public class MatrixUtilities {
      * @return                          +1 if hypothesis is more than or equal to 0, otherwise returns -1
      */
     public static int getHypothesis(double[] augmentedVector, double[] gradient) {
-        double dotProductOfWeightsAndVector = getDotProduct(gradient, augmentedVector);
         double hypothesisResult = polynomialKernel(augmentedVector, gradient, 1);
 //        System.out.println(hypothesisResult);
         if(hypothesisResult >= 1)
+            return 1;
+        else
+            return -1;
+    }
+
+    /**
+     * Calculates the hypothesis with a zeta in the constraint for a soft margin.
+     * @param augmentedVector           is the inputs, a augmentedVector on the graph where x0 = 1
+     * @param gradient                  is the gradient, which is an augmentedVector, AKA weights for perceptron. w0 = yIntercept initially.
+     * @param zeta                      is the for soft margin classification
+     * @return                          +1 if hypothesis is more than or equal to 0, otherwise returns -1
+     */
+    public static int getHypothesis(double[] augmentedVector, double[] gradient, double zeta) {
+        double dotProductOfWeightsAndVector = polynomialKernel(augmentedVector, gradient, 9);
+        double hypothesisResult = dotProductOfWeightsAndVector; //can also use polynomial kernel here with a degree of 1.
+//        System.out.println(hypothesisResult);
+        if(hypothesisResult >= 1.0 - zeta)
             return 1;
         else
             return -1;
@@ -111,20 +127,24 @@ public class MatrixUtilities {
     /**
      * Transforms a classification array into -1 or 1, depending on the classification to keep as 1, if not classification, -1.
      * @param allClassifications    the array containing all the classifications
-     * @param desiredClass          the desired classification to turn into 1 in the classification array.
+     * @param desiredClasses        the desired classifications to turn into 1 in the classification array.
      * @return                      an array containing 1s for desiredClassification, -1 for other classifications
      */
-    public static double[] getBinaryClassifications(double[] allClassifications, double desiredClass) {
+    public static double[] getBinaryClassifications(double[] allClassifications, double[] desiredClasses) {
         int size = allClassifications.length;
         double[] binaryClassifications = new double[size];
 
-        for(int index = 0; index < size; index++) {
-            int classification = (int)allClassifications[index];
-
-            if(classification == desiredClass)
-                binaryClassifications[index] = 1;
-            else
-                binaryClassifications[index] = -1;
+        for(int classificationIndex = 0; classificationIndex < size; classificationIndex++) {
+            int classification = (int)allClassifications[classificationIndex];
+            binaryClassifications[classificationIndex] = -1; //-1, unless it's the desired
+            //Ensures binary classification is 1 if classification is the desired class
+            for(int desiredClassificationIndex = 0; desiredClassificationIndex < desiredClasses.length; desiredClassificationIndex++) {
+                double desiredClass = desiredClasses[desiredClassificationIndex];
+                if (classification == desiredClass) {
+                    binaryClassifications[classificationIndex] = 1;
+                    break;
+                }
+            }
         }
         return binaryClassifications;
     }

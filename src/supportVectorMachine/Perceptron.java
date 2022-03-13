@@ -10,6 +10,9 @@ public class Perceptron {
     private int numberOfFeatures;
     private double[] weights;
     private double[] zetas; //for soft margin, there is a zeta for each point
+    private final double zetaIncrement = 10;
+    private final double maximumZetaErrorMultiplier = 50;
+    private final double maxZeta = zetaIncrement * maximumZetaErrorMultiplier;
 
     public Perceptron(double[][] X, double[] y, long seed) {
         int numberOfFeatures = X[0].length;
@@ -26,7 +29,7 @@ public class Perceptron {
         int numberOfFeatures = X[0].length;
         this.numberOfFeatures = numberOfFeatures;
         this.X = X;
-//        this.zetas = new double[this.numberOfFeatures];
+        this.zetas = new double[X.length]; //a zeta for every datapoint
         this.y = y;
         this.weights = randomiseWeights();
     }
@@ -36,9 +39,9 @@ public class Perceptron {
         weights = randomiseWeights();
         int[] misclassifiedExamples = predict(X, y, weights); //indexes of misclassified
 //        System.out.println(Arrays.toString(weights));
-        while (misclassifiedExamples.length != 0) {
+        while (misclassifiedExamples.length > 0) {
 //            System.out.println(Arrays.toString(misclassifiedExamples));
-//            System.out.println("NO. OF MIS: " + misclassifiedExamples.length);
+            System.out.println("NO. OF MIS: " + misclassifiedExamples.length);
             int misclassifiedIndex = pickOneFrom(misclassifiedExamples); //chooses a random example.
             double[] x = X[misclassifiedIndex];
             double actualClassification = y[misclassifiedIndex];
@@ -65,9 +68,9 @@ public class Perceptron {
 
         for (int pointNumber = 0; pointNumber < X.length; pointNumber++) {
             double[] features = X[pointNumber];
-//            double zetaForPoint = zetas[pointNumber];
-            hypothesis[pointNumber] = MatrixUtilities.getHypothesis(features, weights);
-//            hypothesis[pointNumber] = MatrixUtilities.getHypothesis(features, weights, zetaForPoint);
+            double zetaForPoint = zetas[pointNumber];
+//            hypothesis[pointNumber] = MatrixUtilities.getHypothesis(features, weights);
+            hypothesis[pointNumber] = MatrixUtilities.getHypothesis(features, weights, zetaForPoint);
 //            hypothesis[pointNumber] = MatrixUtilities.getHypothesisSoftMargin(features, weights, y[pointNumber], 0);
         }
 
@@ -76,27 +79,50 @@ public class Perceptron {
 
     //calculates whether the points are misclassified
     public int[] predict(double[][] X, double[] y, double[] weights) {
-        int[] predict = new int[X.length];
         int[] hypothesis = initialiseHypothesis(X, weights);
 //        System.out.println(Arrays.toString(hypothesis));
         int numberOfMisclassified = 0;
         //get number of misclassified
-        for (int predictionNumber = 0; predictionNumber < predict.length; predictionNumber++) {
+        for (int predictionNumber = 0; predictionNumber < X.length; predictionNumber++) {
             int prediction = hypothesis[predictionNumber];
             double actual = y[predictionNumber];
 
-            if (prediction != actual)
+            if (prediction != actual) {
+                double zeta = zetas[predictionNumber];
+                zeta += zetaIncrement;
+                zetas[predictionNumber] = zeta;
+                if(zeta >= maxZeta) {//ensures data point is removed if too many errors
+                    int dataPointIndex = predictionNumber;
+                    int secondHalfSize = X.length - 1 - dataPointIndex;
+                    int sourcePositionFirstHalf = 0;
+                    int sourcePositionSecondHalf = dataPointIndex+1;
+
+                    double[][] newTrainingPoints = new double[X.length - 1][];
+                    System.arraycopy(X, sourcePositionFirstHalf, newTrainingPoints, sourcePositionFirstHalf, dataPointIndex);
+                    System.arraycopy(X, sourcePositionSecondHalf, newTrainingPoints, dataPointIndex, secondHalfSize);
+
+                    double[] newY = new double[newTrainingPoints.length];
+                    System.arraycopy(y, sourcePositionFirstHalf, newY, sourcePositionFirstHalf, dataPointIndex);
+                    System.arraycopy(y, sourcePositionSecondHalf, newY, dataPointIndex, secondHalfSize);
+
+                    this.X = newTrainingPoints;
+                    this.y = newY;
+                    numberOfMisclassified--;
+                }
                 numberOfMisclassified++;
+                System.out.println("ZETA: " + zetas[predictionNumber]);
+            }
         }
 
         //After counting, finally provide the indexes of those misclassified.
         int[] misclassifiedIndexes = new int[numberOfMisclassified];
-        for (int predictionNumber = 0, misclassifiedIndex = 0; predictionNumber < predict.length; predictionNumber++) {
+        for (int predictionNumber = 0, misclassifiedIndex = 0; predictionNumber < this.X.length && misclassifiedIndex < numberOfMisclassified; predictionNumber++) {
             int prediction = hypothesis[predictionNumber];
-            double actual = y[predictionNumber];
+            double actual = this.y[predictionNumber];
 
-            if (prediction != actual)
+            if (prediction != actual) {
                 misclassifiedIndexes[misclassifiedIndex++] = predictionNumber;
+            }
         }
 
         return misclassifiedIndexes;
