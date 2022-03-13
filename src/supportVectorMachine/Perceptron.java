@@ -7,13 +7,14 @@ public class Perceptron {
     private double[][] X;
     private double[] y;
     private Random random = new Random(); //for testing purposes
-    private final int numberOfFeatures;
+    private int numberOfFeatures;
     private double[] weights;
     private double[] zetas; //for soft margin, there is a zeta for each point
 
-    public Perceptron(double[][] X, double[] y, long seed, int numberOfFeatures) {
-        this.numberOfFeatures = numberOfFeatures + 1;
-        this.X = augmentX(X, this.numberOfFeatures);
+    public Perceptron(double[][] X, double[] y, long seed) {
+        int numberOfFeatures = X[0].length;
+        this.numberOfFeatures = numberOfFeatures;
+        this.X = X;
         this.zetas = new double[this.numberOfFeatures];
         this.y = y;
         this.random.setSeed(seed);
@@ -21,32 +22,13 @@ public class Perceptron {
     }
 
     //no seed
-    public Perceptron(double[][] X, double[] y, int numberOfFeatures) {
-        this.numberOfFeatures = numberOfFeatures + 1;
-        this.X = augmentX(X, this.numberOfFeatures);
+    public Perceptron(double[][] X, double[] y) {
+        int numberOfFeatures = X[0].length;
+        this.numberOfFeatures = numberOfFeatures;
+        this.X = X;
 //        this.zetas = new double[this.numberOfFeatures];
         this.y = y;
         this.weights = randomiseWeights();
-    }
-
-
-    /**
-     * Augments the vectors, the inputs, the x and y by making x0 = 1
-     *
-     * @param X the vector to augment
-     * @return an augmented vector, for which x0 = 1
-     */
-    public static double[][] augmentX(double[][] X, int numberOfFeatures) {
-        double[][] augmentedX = new double[X.length][numberOfFeatures];
-        for (int pointIndex = 0; pointIndex < augmentedX.length; pointIndex++) {
-            double[] currentPoint = X[pointIndex];
-            augmentedX[pointIndex][0] = 1;
-            for (int featureIndex = 0; featureIndex < currentPoint.length; featureIndex++) {
-                double feature = currentPoint[featureIndex];
-                augmentedX[pointIndex][featureIndex + 1] = feature;
-            }
-        }
-        return augmentedX;
     }
 
     //Runs the algorithm
@@ -83,7 +65,7 @@ public class Perceptron {
 
         for (int pointNumber = 0; pointNumber < X.length; pointNumber++) {
             double[] features = X[pointNumber];
-            double zetaForPoint = zetas[pointNumber];
+//            double zetaForPoint = zetas[pointNumber];
             hypothesis[pointNumber] = MatrixUtilities.getHypothesis(features, weights);
 //            hypothesis[pointNumber] = MatrixUtilities.getHypothesis(features, weights, zetaForPoint);
 //            hypothesis[pointNumber] = MatrixUtilities.getHypothesisSoftMargin(features, weights, y[pointNumber], 0);
