@@ -2,6 +2,7 @@ package main;
 
 import kNearestNeighbours.KNearestNeighbour; //Nearest Neighbour algorithm
 import nearestNeighbour.NearestNeighbour;
+import supportVectorMachine.SupportVectorMachines;
 import toolKit.*; //For reading in the data and creating an array of Rows.
 
 /**
@@ -25,8 +26,9 @@ public class ApplicationAllAlgorithms {
     private final static int SECOND_FOLD = 2;
 
     public static void main(String[] args) {
-        run2FoldTestOnKnearestNeighbourAlgorithm();
+//        run2FoldTestOnKnearestNeighbourAlgorithm();
 //        run2FoldTestOnNearestNeighbourAlgorithm();
+        run2FoldTestOnSVM();
     }
 
     /**                                         NEAREST NEIGHBOUR                                                   */
@@ -55,8 +57,8 @@ public class ApplicationAllAlgorithms {
     private static void run2FoldTestOnKnearestNeighbourAlgorithm() {
         double firstFoldAccuracy = runKNearestNeighbourAlgorithm(TRAINING_DATA_SETS, TESTING_DATA_SETS, FIRST_FOLD); //K Nearest neighbour algorithm run and output results
         double secondFoldAccuracy = runKNearestNeighbourAlgorithm(TRAINING_DATA_SETS_2, TESTING_DATA_SETS_2, SECOND_FOLD); //K Nearest neighbour algorithm run and output results
-        double averageOfTheTwoNearestNeighbours = (firstFoldAccuracy + secondFoldAccuracy) / NUMBER_OF_FOLDS;
-        String resultOfNearestNeighbour = "Average of 2 fold test for K-nearest neighbours algorithm: " + averageOfTheTwoNearestNeighbours;
+        double averageOfTheTwoKNearestNeighbours = (firstFoldAccuracy + secondFoldAccuracy) / NUMBER_OF_FOLDS;
+        String resultOfNearestNeighbour = "Average of 2 fold test for K-nearest neighbours algorithm: " + averageOfTheTwoKNearestNeighbours;
         System.out.println(resultOfNearestNeighbour);
     }
 
@@ -80,4 +82,30 @@ public class ApplicationAllAlgorithms {
         return bestAccuracy;
     }
 
+    /**                                         SUPPORT VECTOR MACHINES (SVM)                                       */
+    //Performs 2-fold test on support vector machines algorithm
+    private static void run2FoldTestOnSVM() {
+        Row[] tmpTrain = new Row[600]; //t
+        System.arraycopy(TRAINING_DATA_SETS, 0, tmpTrain, 0, tmpTrain.length);//t
+        Row[] tmpTest = new Row[600];//t
+        System.arraycopy(TESTING_DATA_SETS, 0, tmpTest, 0, tmpTest.length);//t
+        double firstFoldAccuracy = runSVM(tmpTrain, tmpTest, FIRST_FOLD); //t
+//        double firstFoldAccuracy = runSVM(TRAINING_DATA_SETS, TESTING_DATA_SETS, FIRST_FOLD); //K Nearest neighbour algorithm run and output results
+//        double secondFoldAccuracy = runSVM(TRAINING_DATA_SETS_2, TESTING_DATA_SETS_2, SECOND_FOLD); //K Nearest neighbour algorithm run and output results
+//        double averageOfTheTwoSVMs = (firstFoldAccuracy + secondFoldAccuracy) / NUMBER_OF_FOLDS;
+        double averageOfTheTwoSVMs = (firstFoldAccuracy + 0) / NUMBER_OF_FOLDS; //test
+        String resultOfNearestNeighbour = "Average of 2 fold test for Support Vector Machines: " + averageOfTheTwoSVMs;
+        System.out.println(resultOfNearestNeighbour);
+    }
+
+    //Runs SVM algorithm
+    public static double runSVM(Row[] dataset1, Row[] dataset2, int foldNumber) {
+        //rerun nearest neighbour algorithm, each time increment the number of nearest neighbour
+        String algorithmName = "Support Vector Machines" + foldNumber;
+        SupportVectorMachines supportVectorMachines = new SupportVectorMachines(algorithmName, dataset2, dataset1, NUMBER_OF_POSSIBLE_CLASSIFICATIONS);
+        supportVectorMachines.run();
+        double accuracy = supportVectorMachines.getAccuracy();
+        System.out.println(supportVectorMachines); //outputs result of the algorithm with the best number of nearest neighbours
+        return accuracy;
+    }
 }
