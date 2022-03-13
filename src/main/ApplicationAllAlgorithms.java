@@ -32,7 +32,9 @@ public class ApplicationAllAlgorithms {
         run2FoldTestOnSVM();
     }
 
+    /**                                         -----------------                                                   */
     /**                                         NEAREST NEIGHBOUR                                                   */
+    /**                                         -----------------                                                   */
     //Performs 2-fold test on nearest neighbour algorithm
     private static void run2FoldTestOnNearestNeighbourAlgorithm() {
         double firstFoldAccuracy = runNearestNeighbourAlgorithm(TRAINING_DATA_SETS, TESTING_DATA_SETS, FIRST_FOLD); //Nearest neighbour algorithm run and output results
@@ -54,7 +56,9 @@ public class ApplicationAllAlgorithms {
         return accuracy;
     }
 
+    /**                                         --------------------                                                 */
     /**                                         K-NEAREST NEIGHBOURS                                                */
+    /**                                         --------------------                                                */
     //Performs 2-fold test on k-nearest neighbour algorithm
     private static void run2FoldTestOnKnearestNeighbourAlgorithm() {
         double firstFoldAccuracy = runKNearestNeighbourAlgorithm(TRAINING_DATA_SETS, TESTING_DATA_SETS, FIRST_FOLD); //K Nearest neighbour algorithm run and output results
@@ -84,7 +88,9 @@ public class ApplicationAllAlgorithms {
         return bestAccuracy;
     }
 
+    /**                                         -----------------------------                                       */
     /**                                         SUPPORT VECTOR MACHINES (SVM)                                       */
+    /**                                         -----------------------------                                       */
     //Performs 2-fold test on support vector machines algorithm
     private static void run2FoldTestOnSVM() {
         Row[] tmpTrain = new Row[600]; //t
