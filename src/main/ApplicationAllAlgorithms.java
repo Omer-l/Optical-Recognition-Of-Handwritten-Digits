@@ -112,7 +112,8 @@ public class ApplicationAllAlgorithms {
         //rerun nearest neighbour algorithm, each time increment the number of nearest neighbour
         String algorithmName = "Support Vector Machines fold " + foldNumber;
         SupportVectorMachines supportVectorMachines = new SupportVectorMachines(algorithmName, dataset2, dataset1, NUMBER_OF_POSSIBLE_CLASSIFICATIONS);
-        supportVectorMachines.run();
+//        supportVectorMachines.run();
+        supportVectorMachines.myTestRun();
         double accuracy = supportVectorMachines.getAccuracy();
         System.out.println(supportVectorMachines); //outputs result of the algorithm with the best number of nearest neighbours
         return accuracy;

@@ -88,11 +88,11 @@ public class Perceptron {
             double actual = y[predictionNumber];
 
             if (prediction != actual) {
+                int dataPointIndex = predictionNumber;
                 double zeta = zetas[predictionNumber];
                 zeta += zetaIncrement;
                 zetas[predictionNumber] = zeta;
                 if(zeta >= maxZeta) {//ensures data point is removed if too many errors
-                    int dataPointIndex = predictionNumber;
                     int secondHalfSize = X.length - 1 - dataPointIndex;
                     int sourcePositionFirstHalf = 0;
                     int sourcePositionSecondHalf = dataPointIndex+1;
