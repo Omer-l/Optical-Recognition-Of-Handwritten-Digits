@@ -21,6 +21,23 @@ public class MatrixUtilities {
     }
 
     /**
+     * Calculates the dot product of two vectors/points excludes x_0 and w_0 where x_0 = 1 and w_0 is 'b' or yIntercept
+     * @param weights           is the weights
+     * @param vector            is a vector/point
+     * @return                  dot product of the given vectors
+     */
+    public static double getDotProductExcludeX0W0(double[] weights, double[] vector) {
+        double dotProduct = 0;
+
+        for(int vectorNumber = 1; vectorNumber < weights.length && vectorNumber < vector.length; vectorNumber++) {
+            double weight = weights[vectorNumber];
+            double vectorPoint2 = vector[vectorNumber];
+            dotProduct += (weight * vectorPoint2);
+        }
+        return dotProduct;
+    }
+
+    /**
      * function that returns the result of a dot product performed in another space
      * @param vector1   is vector 1 to multiply
      * @param vector2   is vector 2 that will be multiplied with vector 1

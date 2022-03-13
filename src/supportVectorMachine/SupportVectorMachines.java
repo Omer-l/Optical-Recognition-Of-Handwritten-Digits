@@ -16,8 +16,6 @@ public class SupportVectorMachines extends HandwrittenDigitClassifierAlgorithm {
         initialiseClassificationsAndX(trainingRows);
     }
 
-
-
     /**
      * Augments the vectors, the inputs, the x and y by making x0 = 1
      * @param x     the vector to augment
@@ -69,7 +67,6 @@ public class SupportVectorMachines extends HandwrittenDigitClassifierAlgorithm {
 
         for(int desiredClassification = 0; desiredClassification < numberOfPossibleClassifications; desiredClassification++) {
             perceptrons[desiredClassification] = getClassification(desiredClassification); //find perceptron for desired classification
-            System.out.println("NEXT");
         }
         return perceptrons;
     }

@@ -38,7 +38,7 @@ public class Perceptron {
 //        System.out.println(Arrays.toString(weights));
         while (misclassifiedExamples.length != 0) {
 //            System.out.println(Arrays.toString(misclassifiedExamples));
-            System.out.println("NO. OF MIS: " + misclassifiedExamples.length);
+//            System.out.println("NO. OF MIS: " + misclassifiedExamples.length);
             int misclassifiedIndex = pickOneFrom(misclassifiedExamples); //chooses a random example.
             double[] x = X[misclassifiedIndex];
             double actualClassification = y[misclassifiedIndex];

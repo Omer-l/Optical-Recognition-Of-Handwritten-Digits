@@ -28,6 +28,7 @@ public class ApplicationAllAlgorithms {
     public static void main(String[] args) {
 //        run2FoldTestOnKnearestNeighbourAlgorithm();
 //        run2FoldTestOnNearestNeighbourAlgorithm();
+
         run2FoldTestOnSVM();
     }
 
@@ -91,10 +92,11 @@ public class ApplicationAllAlgorithms {
         Row[] tmpTest = new Row[600];//t
         System.arraycopy(TESTING_DATA_SETS, 0, tmpTest, 0, tmpTest.length);//t
         double firstFoldAccuracy = runSVM(tmpTrain, tmpTest, FIRST_FOLD); //t
+        double secondFoldAccuracy = runSVM(tmpTest, tmpTrain, SECOND_FOLD); //t
 //        double firstFoldAccuracy = runSVM(TRAINING_DATA_SETS, TESTING_DATA_SETS, FIRST_FOLD); //K Nearest neighbour algorithm run and output results
 //        double secondFoldAccuracy = runSVM(TRAINING_DATA_SETS_2, TESTING_DATA_SETS_2, SECOND_FOLD); //K Nearest neighbour algorithm run and output results
-//        double averageOfTheTwoSVMs = (firstFoldAccuracy + secondFoldAccuracy) / NUMBER_OF_FOLDS;
-        double averageOfTheTwoSVMs = (firstFoldAccuracy + 0) / NUMBER_OF_FOLDS; //test
+        double averageOfTheTwoSVMs = (firstFoldAccuracy + secondFoldAccuracy) / NUMBER_OF_FOLDS;
+//        double averageOfTheTwoSVMs = (firstFoldAccuracy + firstFoldAccuracy) / NUMBER_OF_FOLDS; //test
         String resultOfNearestNeighbour = "Average of 2 fold test for Support Vector Machines: " + averageOfTheTwoSVMs;
         System.out.println(resultOfNearestNeighbour);
     }
