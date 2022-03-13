@@ -41,7 +41,7 @@ public class Perceptron {
 //        System.out.println(Arrays.toString(weights));
         while (misclassifiedExamples.length > 0) {
 //            System.out.println(Arrays.toString(misclassifiedExamples));
-            System.out.println("NO. OF MIS: " + misclassifiedExamples.length);
+//            System.out.println("NO. OF MIS: " + misclassifiedExamples.length);
             int misclassifiedIndex = pickOneFrom(misclassifiedExamples); //chooses a random example.
             double[] x = X[misclassifiedIndex];
             double actualClassification = y[misclassifiedIndex];
@@ -69,9 +69,7 @@ public class Perceptron {
         for (int pointNumber = 0; pointNumber < X.length; pointNumber++) {
             double[] features = X[pointNumber];
             double zetaForPoint = zetas[pointNumber];
-//            hypothesis[pointNumber] = MatrixUtilities.getHypothesis(features, weights);
             hypothesis[pointNumber] = MatrixUtilities.getHypothesis(features, weights, zetaForPoint);
-//            hypothesis[pointNumber] = MatrixUtilities.getHypothesisSoftMargin(features, weights, y[pointNumber], 0);
         }
 
         return hypothesis;
@@ -86,13 +84,12 @@ public class Perceptron {
         for (int predictionNumber = 0; predictionNumber < X.length; predictionNumber++) {
             int prediction = hypothesis[predictionNumber];
             double actual = y[predictionNumber];
-
             if (prediction != actual) {
+                int dataPointIndex = predictionNumber;
                 double zeta = zetas[predictionNumber];
                 zeta += zetaIncrement;
                 zetas[predictionNumber] = zeta;
                 if(zeta >= maxZeta) {//ensures data point is removed if too many errors
-                    int dataPointIndex = predictionNumber;
                     int secondHalfSize = X.length - 1 - dataPointIndex;
                     int sourcePositionFirstHalf = 0;
                     int sourcePositionSecondHalf = dataPointIndex+1;
@@ -110,7 +107,7 @@ public class Perceptron {
                     numberOfMisclassified--;
                 }
                 numberOfMisclassified++;
-                System.out.println("ZETA: " + zetas[predictionNumber]);
+//                System.out.println("ZETA: " + zetas[predictionNumber]);
             }
         }
 
@@ -127,6 +124,11 @@ public class Perceptron {
 
         return misclassifiedIndexes;
     }
+
+//    //calculates whether the points are misclassified
+//    public static int predictASinglePoint(double[] x, double[] y, double[] weights) {
+//
+//    }
 
     //Returns a random misclassified example's index
     private int pickOneFrom(int[] misclassifiedExamples) {

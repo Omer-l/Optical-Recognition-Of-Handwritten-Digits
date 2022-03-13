@@ -26,8 +26,11 @@ public class ApplicationAllAlgorithms {
     private final static int SECOND_FOLD = 2;
 
     public static void main(String[] args) {
+        System.out.println("Running K-Nearest Neighbours...");
 //        run2FoldTestOnKnearestNeighbourAlgorithm();
+        System.out.println("Running Nearest Neighbour...");
 //        run2FoldTestOnNearestNeighbourAlgorithm();
+        System.out.println("Running Support Vector Machine (SVM)...");
         run2FoldTestOnSVM();
     }
 
@@ -113,6 +116,7 @@ public class ApplicationAllAlgorithms {
         String algorithmName = "Support Vector Machines fold " + foldNumber;
         SupportVectorMachines supportVectorMachines = new SupportVectorMachines(algorithmName, dataset2, dataset1, NUMBER_OF_POSSIBLE_CLASSIFICATIONS);
         supportVectorMachines.run();
+//        supportVectorMachines.myTestRun();
         double accuracy = supportVectorMachines.getAccuracy();
         System.out.println(supportVectorMachines); //outputs result of the algorithm with the best number of nearest neighbours
         return accuracy;

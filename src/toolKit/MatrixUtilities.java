@@ -77,7 +77,7 @@ public class MatrixUtilities {
      * @return                          +1 if hypothesis is more than or equal to 0, otherwise returns -1
      */
     public static int getHypothesis(double[] augmentedVector, double[] gradient, double zeta) {
-        double dotProductOfWeightsAndVector = polynomialKernel(augmentedVector, gradient, 9);
+        double dotProductOfWeightsAndVector = polynomialKernel(augmentedVector, gradient, 11);
         double hypothesisResult = dotProductOfWeightsAndVector; //can also use polynomial kernel here with a degree of 1.
 //        System.out.println(hypothesisResult);
         if(hypothesisResult >= 1.0 - zeta)
@@ -147,5 +147,16 @@ public class MatrixUtilities {
             }
         }
         return binaryClassifications;
+    }
+
+    //Gets the normal to the vector
+    public static double getMagnitudeOrUnitNormalVector(double[] vector) {
+        double sum = 0;
+        for(int elementIndex = 1; elementIndex < vector.length; elementIndex++) { //starts from 1, excludes 'b'
+            double element = vector[elementIndex];
+            sum += (element * element);
+        }
+
+        return Math.sqrt(sum);
     }
 }
