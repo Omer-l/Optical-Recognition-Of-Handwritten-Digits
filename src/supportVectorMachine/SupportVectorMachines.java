@@ -7,7 +7,7 @@ import toolKit.MatrixUtilities;
 import java.util.Arrays;
 
 public class SupportVectorMachines extends HandwrittenDigitClassifierAlgorithm {
-    private static final int NUMBER_OF_LINES_ATTEMPTS_PER_CLASSIFICATION = 5;
+    private static final int NUMBER_OF_LINES_ATTEMPTS_PER_CLASSIFICATION = 1;
     private final int numberOfPossibleClassifications; //digits vary from 0 to 9.
     private double[] classifications;
     private double[][] X;
@@ -106,12 +106,6 @@ public class SupportVectorMachines extends HandwrittenDigitClassifierAlgorithm {
             double[] classifications = {desiredClassification};
             perceptrons[desiredClassification] = getClassification(classifications); //find perceptron for desired classification
         }
-//        double[][] allDesiredClassifications = initialiseAllDesiredClassifications();
-//        Perceptron[][] testPerceptrons = new Perceptron[numberOfPerceptrons][NUMBER_OF_LINES_ATTEMPTS_PER_CLASSIFICATION];
-//        for(int allDesiredClassificationsIndex = 0; allDesiredClassificationsIndex < allDesiredClassifications.length; allDesiredClassificationsIndex++) {
-//            double[] desiredClassifications = allDesiredClassifications[allDesiredClassificationsIndex];
-//            testPerceptrons[allDesiredClassificationsIndex] = getClassification(desiredClassifications);
-//        }
         return perceptrons;
     }
 
