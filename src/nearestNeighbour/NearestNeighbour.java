@@ -5,7 +5,9 @@ import toolKit.HandwrittenDigitClassifierAlgorithm; //To ensure this class conta
 import toolKit.Row; //For assigning each row from the dataset
 
 /**
- * This class contains the necessary functions to calculate the closest training data to given test data.
+ * This class contains the necessary functions to calculate the closest training data.
+ * The classification of the test data is the closest training data point based on Euclidean distance formula for 64 inputs.
+ * Then, the classification is compared with the test data’s actual classification.
  */
 public class NearestNeighbour extends HandwrittenDigitClassifierAlgorithm {
     private final int numberOfPossibleClassifications; //digits vary from 0 to 9.
@@ -95,6 +97,6 @@ public class NearestNeighbour extends HandwrittenDigitClassifierAlgorithm {
         double accuracy = getAccuracy();
         double errorRate = MAX_PERCENTAGE - accuracy;
 
-        return "ALGORITHM NAME: \t\t\t" + algorithmName + "\nCORRECT CLASSIFICATIONS: \t" + correctClassificationCounter + "\nINCORRECT CLASSIFICATIONS: \t" + incorrectClassificationCounter + "\nACCURACY: \t\t\t\t\t" + accuracy + "%\nERROR RATE: \t\t\t\t" + accuracy;
+        return "ALGORITHM NAME: \t\t\t" + algorithmName + "\nCORRECT CLASSIFICATIONS: \t" + correctClassificationCounter + "\nINCORRECT CLASSIFICATIONS: \t" + incorrectClassificationCounter + "\nACCURACY: \t\t\t\t\t" + accuracy + "%\nERROR RATE: \t\t\t\t" + errorRate;
     }
 }

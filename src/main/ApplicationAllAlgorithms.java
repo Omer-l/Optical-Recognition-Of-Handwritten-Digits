@@ -8,6 +8,8 @@ import toolKit.*; //For reading in the data and creating an array of Rows.
 /**
  * Runs all algorithms attempted for this assignment.
  * Algorithms:
+ * Support Vector Machines
+ * K-Nearest Neighbours
  * Nearest Neighbour
  */
 public class ApplicationAllAlgorithms {
