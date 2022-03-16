@@ -3,6 +3,18 @@ package supportVectorMachine;
 import toolKit.MatrixUtilities;
 import java.util.Random;
 
+/**
+ * The class contains the necessary functions to correctly classify two classes of data.
+ * First, arbitrarily generated weights are applied to each data point. This is the dot product.
+ * The step function (Predict) determines if each data point is above or below the line, based on the dot product
+ * A comparison is then made between each data point and whether it belongs above or below the line.
+ * The misclassified data points are placed into an array, and a random one is chosen.
+ * Weights are either increased or decreased to correctly classify the misclassified data point, and the zeta for the
+ * increased, for which each data point contains its own zeta. Zeta allows for more room for error for the perceptron,
+ * and thus, this is a soft margin classification.
+ * If a misclassified data point's zeta has been increased to the maximum zeta, that data point is removed entirely from
+ * the training data points since it will only cause an infinite loop.
+ */
 public class Perceptron {
     private double[][] X;
     private double[] y;

@@ -1,9 +1,12 @@
 package nearestNeighbour;
 
-import toolKit.EuclideanDistanceMergeSorter;
-import toolKit.HandwrittenDigitClassifierAlgorithm;
-import toolKit.Row;
+import toolKit.EuclideanDistanceMergeSorter; //for sorting the data points
+import toolKit.HandwrittenDigitClassifierAlgorithm; //To ensure this class contains necessary functions and variables to be a machine learning algorithm
+import toolKit.Row; //For assigning each row from the dataset
 
+/**
+ * This class contains the necessary functions to calculate the closest training data to given test data.
+ */
 public class NearestNeighbour extends HandwrittenDigitClassifierAlgorithm {
     private final int numberOfPossibleClassifications; //digits vary from 0 to 9.
     public NearestNeighbour(String algorithmName, Row[] trainingRows, Row[] testRows, int numberOfPossibleClassifications) {

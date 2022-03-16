@@ -1,13 +1,20 @@
 package supportVectorMachine;
 
-import toolKit.HandwrittenDigitClassifierAlgorithm;
-import toolKit.Row;
-import toolKit.MatrixUtilities;
+import toolKit.HandwrittenDigitClassifierAlgorithm; //To ensure this class contains necessary functions and variables to be a machine learning algorithm
+import toolKit.Row; //For assigning each row from the dataset
+import toolKit.MatrixUtilities; //For linear algebra functions
 
-import java.util.Arrays;
-
+/**
+ * This class contains functions for a multi class support vector machine.
+ * To begin, a number of perceptrons is created for each class (i.e., 10 perceptrons for class 0, ... 10 perceptrons
+ * for class 9).
+ * Then the best perceptron (the perceptron with the maximum margin) is selected.
+ * Next, the test data is classified using each perceptron, and the one with the correct classification is selected.
+ * The perceptron with the correct classification becomes the digit the test data is classified as.
+ * Then, the prediction made is compared with the test data's actual classification.
+ */
 public class SupportVectorMachines extends HandwrittenDigitClassifierAlgorithm {
-    private static final int NUMBER_OF_LINES_ATTEMPTS_PER_CLASSIFICATION = 1;
+    private static final int NUMBER_OF_LINES_ATTEMPTS_PER_CLASSIFICATION = 5;
     private final int numberOfPossibleClassifications; //digits vary from 0 to 9.
     private double[] classifications;
     private double[][] X;
@@ -216,6 +223,21 @@ public class SupportVectorMachines extends HandwrittenDigitClassifierAlgorithm {
         return actualClassification;
     }
 
+    //Creates an array, for which each index is a perceptron and whether the data point is correctly classified with the perceptron
+    private int[] getClassificationWithAllPerceptrons(Perceptron[][] perceptrons, double[] augX) {
+        int[] allClassifications = new int[perceptrons.length];
+        //count up the votes
+        for (int perceptronIndex = 0; perceptronIndex < perceptrons.length; perceptronIndex++) {
+            double[] weights = perceptrons[perceptronIndex][0].getWeights(); //for now attempt 1 line. so index 0
+            int prediction = MatrixUtilities.getHypothesis(augX, weights); //if -1, then not that category, if 1, then it is possibly that digit
+
+            if (prediction == 1)
+                allClassifications[perceptronIndex] = 1;
+        }
+
+        return allClassifications;
+    }
+
     //Runs the algorithm
     @Override
     public void run() {
@@ -234,6 +256,117 @@ public class SupportVectorMachines extends HandwrittenDigitClassifierAlgorithm {
                 correctClassificationCounter++;
             else
                 incorrectClassificationCounter++;
+        }
+    }
+
+    public void myTestRun2() {
+        //initialise each perceptron
+        Perceptron[][] perceptrons = initialisePerceptrons();
+        double[][] weightsOfEachPerceptron = getWeightsOfEachPerceptron(perceptrons);
+        Row[] testRows = getTestRows();
+        //go through tests
+        for(int testPointIndex = 0; testPointIndex < testRows.length; testPointIndex++) {
+            double[] augX = augmentX(testRows[testPointIndex].getInputs());
+            int classification = (int)testRows[testPointIndex].getClassification();
+            int[] countVote = new int[numberOfPossibleClassifications];
+            //count up the votes
+            for(int perceptronIndex = 0; perceptronIndex < perceptrons.length; perceptronIndex++) {
+                double[] weights = perceptrons[perceptronIndex][0].getWeights(); //for now attempt 1 line. so index 0
+//                double[] weights = perceptrons[perceptronIndex]; //for now attempt 1 line. so index 0
+                int prediction = MatrixUtilities.getHypothesis(augX, weights); //if -1, then not that category, if 1, then it is possibly that digit
+
+                if(prediction == 1)
+                    countVote[perceptronIndex]++;
+            }
+            int[] votes = new int[10];
+//            System.out.print( "\n" + (testPointIndex + 1) + " " + Arrays.toString(countVote));
+            int numberOfOnes = 0;
+            for(int i = 0; i < countVote.length; i++) {
+                int vote = countVote[i];
+                if(vote == 1 && numberOfOnes >= 1) {
+//                    System.out.print(" " + i);
+                    votes[numberOfOnes] = i;
+                    numberOfOnes++;
+                } else if(vote == 1 && numberOfOnes == 0) {
+//                    System.out.print(" ~ " + i);
+                    votes[numberOfOnes] = i;
+                    numberOfOnes++;
+                }
+            }
+            //print
+//            if(numberOfOnes == 0)
+//                System.out.print(" ~ X");
+//            else if(numberOfOnes > 1)
+//                System.out.print(" |> " + numberOfOnes + " VOTES");
+
+            //get highestVote
+            int highestVoteIndex = 0;
+            int highestVote = 0;
+            int firstVote = votes[0];
+            int secondVote = votes[1];
+            int thirdVote = votes[2];
+
+            if(firstVote == 0 && secondVote == 6)
+                highestVoteIndex = 6;
+            else if(firstVote == 0 && secondVote == 8)
+                highestVoteIndex = 2;
+            else if(firstVote == 1 && secondVote == 2)
+                highestVoteIndex = 2;
+            else if(firstVote == 1 && secondVote == 3)
+                highestVoteIndex = 9;
+            else if(firstVote == 1 && secondVote == 4)
+                highestVoteIndex = 4;
+            else if(firstVote == 1 && secondVote == 5)
+                highestVoteIndex = 3;
+            else if(firstVote == 1 && secondVote == 6)
+                highestVoteIndex = 6;
+            else if(firstVote == 1 && secondVote == 8)
+                highestVoteIndex = 1;
+            else if(firstVote == 1 && secondVote == 7)
+                highestVoteIndex = 1;
+            else if(firstVote == 2 && secondVote == 3)
+                highestVoteIndex = 3;
+//            else if(firstVote == 2 && secondVote == 3)
+//                highestVoteIndex = 7;
+            else if(firstVote == 2 && secondVote == 8)
+                highestVoteIndex = 2;
+            else if(firstVote == 3 && secondVote == 8)
+                highestVoteIndex = 8;
+            else if(firstVote == 3 && secondVote == 9)
+                highestVoteIndex = 9;
+            else if(firstVote == 4 && secondVote == 9)
+                highestVoteIndex = 4;
+            else if(firstVote == 5 && secondVote == 6)
+                highestVoteIndex = 5;
+            else if(firstVote == 5 && secondVote == 8)
+                highestVoteIndex = 5;
+            else if(firstVote == 5 && secondVote == 9)
+                highestVoteIndex = 5;
+            else if(firstVote == 6 && secondVote == 8)
+                highestVoteIndex = 6;
+            else if(firstVote == 7 && secondVote == 9)
+                highestVoteIndex = 7;
+            else if(firstVote == 8 && secondVote == 9)
+                highestVoteIndex = 8;
+            else if(firstVote == 1 && secondVote == 5 && thirdVote == 9)
+                highestVoteIndex = 5;
+            else
+                for(int voteIndex = 0; voteIndex < countVote.length; voteIndex++) {
+                    int vote = countVote[voteIndex];
+
+                    if(vote > highestVote) {
+                        highestVote = vote;
+                        highestVoteIndex = voteIndex;
+                    }
+                }
+
+            if(highestVoteIndex == classification) {
+                correctClassificationCounter++;
+//                System.out.print(" --- CORRECT");
+            } else {
+                incorrectClassificationCounter++;
+//                System.out.print(" --- INCORRECT");
+            }
         }
     }
 

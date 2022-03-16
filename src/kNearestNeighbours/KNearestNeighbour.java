@@ -1,13 +1,12 @@
 package kNearestNeighbours;
 
-import toolKit.EuclideanDistanceMergeSorter;
+import toolKit.EuclideanDistanceMergeSorter; //for sorting the data points
 import toolKit.HandwrittenDigitClassifierAlgorithm; //To ensure this class contains necessary functions and variables to be a machine learning algorithm
 import toolKit.Row; //For assigning each row from the dataset
 
 /**
- * This class has the functions to get the training row (nearest neighbour) for each test row.
- * Uses Euclidean distance to achieve this.
- * OUTPUT: correct: 2755... incorrect: 55... = 98.04% accuracy
+ * This class can calculate how close training data is to given test data. Then it will vote on a set number
+ * of neighbours to classify the test data.
  */
 public class KNearestNeighbour extends HandwrittenDigitClassifierAlgorithm {
     private final int numberOfPossibleClassifications; //digits vary from 0 to 9.
