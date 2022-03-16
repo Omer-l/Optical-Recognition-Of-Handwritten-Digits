@@ -1,5 +1,7 @@
 package toolKit;
 
+import static supportVectorMachine.Perceptron.polynomialKernel;
+
 public class MatrixUtilities {
 
     /**
@@ -38,23 +40,6 @@ public class MatrixUtilities {
     }
 
     /**
-     * function that returns the result of a dot product performed in another space
-     * @param vector1   is vector 1 to multiply
-     * @param vector2   is vector 2 that will be multiplied with vector 1
-     * @return
-     */
-    public static double polynomialKernel(double[] vector1, double[] vector2, int degree) {
-        int numberOfIterations = vector1.length; //the number of iterations for the value inside the bracket
-        double kernel = 0; //could be 1 to follow lecture vid on youtube.
-
-        for(int index = 0; index < numberOfIterations; index++) {
-            kernel += (vector1[index] * vector2[index]);
-        }
-
-        return Math.pow(kernel, degree);
-    }
-
-    /**
      * Calculates the hypothesis
      * @param augmentedVector           is the inputs, a augmentedVector on the graph where x0 = 1
      * @param gradient                  is the gradient, which is an augmentedVector, AKA weights for perceptron. w0 = yIntercept initially.
@@ -64,23 +49,6 @@ public class MatrixUtilities {
         double hypothesisResult = polynomialKernel(augmentedVector, gradient, 1);
 //        System.out.println(hypothesisResult);
         if(hypothesisResult >= 1)
-            return 1;
-        else
-            return -1;
-    }
-
-    /**
-     * Calculates the hypothesis with a zeta in the constraint for a soft margin.
-     * @param augmentedVector           is the inputs, a augmentedVector on the graph where x0 = 1
-     * @param gradient                  is the gradient, which is an augmentedVector, AKA weights for perceptron. w0 = yIntercept initially.
-     * @param zeta                      is the for soft margin classification
-     * @return                          +1 if hypothesis is more than or equal to 0, otherwise returns -1
-     */
-    public static int getHypothesis(double[] augmentedVector, double[] gradient, double zeta) {
-        double dotProductOfWeightsAndVector = polynomialKernel(augmentedVector, gradient, 11);
-        double hypothesisResult = dotProductOfWeightsAndVector; //can also use polynomial kernel here with a degree of 1.
-//        System.out.println(hypothesisResult);
-        if(hypothesisResult >= 1.0 - zeta)
             return 1;
         else
             return -1;
